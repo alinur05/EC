@@ -23,3 +23,10 @@ export const signupFieldsValidator = (fields) => {
 
     return result
 }
+
+// LOCAL STORAGE
+
+export const getLocalStorage = (key) => JSON.parse(localStorage.getItem(key))
+export const removeLocalStorage = (key = "session") => localStorage.removeItem(key)
+export const setLocalStorage = (value, key = "session") => localStorage.setItem(key, JSON.stringify(value))
+

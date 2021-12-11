@@ -9,11 +9,10 @@ import PublicNavBar from './PublicNavBar/PublicNavBar'
 import PrivateNavBar from './PrivateNavBar/PrivateNavBar'
 
 export default function NavBar() {
-    const isAuth = useSelector(state => state.auth.isAuth)
+    const isAuth = useSelector(state => state.session.isAuth)
 
     return (
         <SNavBar>
-            <GetLogo />
             {
                 isAuth ?
                     <PrivateNavBar /> 

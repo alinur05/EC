@@ -7,9 +7,13 @@ import googleIcon from '../../../../../media/googleIcon.svg'
 import { DARK_BLACK } from '../../../../../media/colors'
 import PostService from '../../../../../API/API'
 import { auth, firebase } from '../../../../../firebase'
+import { useDispatch } from 'react-redux'
+import { authUser } from '../../../../../redux/actions/actions'
+import { setLocalStorage } from '../../../../../utiles'
 
 export default function SignInModal(props) {
-        
+    const dispatch = useDispatch()
+
     const {
         setSigninModalVisible,
         signinModalVisible
@@ -35,8 +39,13 @@ export default function SignInModal(props) {
         }
         
         const responce = await PostService.sign_in(body)
-        console.log(responce)
-        setSigninModalVisible(false)
+        if(responce.value) {
+            dispatch(authUser(responce.value))
+            setLocalStorage(responce.value)
+            setSigninModalVisible(false)
+        }else {
+            console.log(responce.details)
+        }
     }
     
     return (

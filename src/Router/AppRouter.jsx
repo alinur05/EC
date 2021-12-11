@@ -4,7 +4,7 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 import { privateRoutes, publicRoutes } from './routes'
 
 export default function AppRouter() {
-    const isAuth = useSelector(state => state.auth.isAuth)
+    const isAuth = useSelector(state => state.session.isAuth)
     
     return (
         isAuth ?

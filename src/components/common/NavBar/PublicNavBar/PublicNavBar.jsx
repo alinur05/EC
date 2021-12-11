@@ -8,6 +8,7 @@ import Links from './Links'
 export default function PublicNavBar() {
     return (
         <SPublicNavBar>
+            <GetLogo />
             <Links />
             <AuthBlock />
         </SPublicNavBar>
@@ -15,8 +16,7 @@ export default function PublicNavBar() {
 }
 
 const SPublicNavBar = styled(Flex)`
-    width: 60%;
+    width: 100%;
     justify-content:space-between;
     height: 100%;
-
 `
