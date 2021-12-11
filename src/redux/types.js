@@ -1,0 +1,2 @@
+export const AUTH_USER = "AUTH/AUTH_USER"
+export const LOGOUT_USER = "AUTH/LOGOUT_USER"
