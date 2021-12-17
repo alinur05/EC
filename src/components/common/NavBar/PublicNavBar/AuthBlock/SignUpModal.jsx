@@ -4,10 +4,10 @@ import styled, {css} from 'styled-components'
 import Flex from '../../../../../UI/Flex'
 import googleIcon from '../../../../../media/googleIcon.svg'
 import { DARK_BLACK } from '../../../../../media/colors'
-import { signupFieldsValidator } from '../../../../../utiles'
+import { getLocalStorage, signupFieldsValidator } from '../../../../../utiles'
 import PostService from '../../../../../API/API'
 import { auth, firebase } from '../../../../../firebase'
-import {signUpUser, setAuthError} from '../../../../../redux/actions/actions'
+import {signUpUser, setAuthError, clearAuthErrors} from '../../../../../redux/actions/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import ErrorQuery from '../../../../../UI/ErrorQuery'
 import useFetching from '../../../../../hooks/useFetching'
@@ -25,6 +25,7 @@ export default function SignUpModal(props) {
 
     const [signUp, loading, fetchError] = useFetching(async body => {
         dispatch(signUpUser(body))
+        fetchError && dispatch(setAuthError("signup", fetchError))
     })
 
     const [fields, setFields] = useState({
@@ -46,8 +47,11 @@ export default function SignUpModal(props) {
             username: user.displayName.split(' ').join('')
         }
         
-        const responce = await PostService.sign_up(body)
-        console.log(responce)
+        signUp(body)
+        const session = getLocalStorage("session")
+        if(session) {
+            handleModalCancel()
+        }
     }
 
     const handleSignUp = async () => {
@@ -57,13 +61,11 @@ export default function SignUpModal(props) {
             let body = {...fields}
             delete body.repeat_password
 
-            signUp()
-            if(fetchError) {
-                fetchError && dispatch(setAuthError("signup", fetchError))
-            }else {
-                setFields({fullName: "",username: "",password: "",repeat_password: "", email: ""})
-                setSignupModalVisible(false)
-                dispatch(setAuthError("signup", ""))
+            signUp(body)
+
+            const session = getLocalStorage("session")
+            if(session) {
+                handleModalCancel()
             }
         }else {
             dispatch(setAuthError("signup", responce.error))
@@ -77,7 +79,7 @@ export default function SignUpModal(props) {
 
     const handleModalCancel = () => {
         setSignupModalVisible(false)
-        dispatch(setAuthError("signup", ""))
+        dispatch(clearAuthErrors())
         setFields({fullName: "",username: "",password: "",repeat_password: "", email: ""})
     }
     
@@ -182,7 +184,6 @@ const Field = styled.input`
 `
 const ModalFooter = styled(Flex)`
     width: 100%;
-    padding: 20px 0x;
     flex-direction:column;
     justify-content:center;
     align-items:center;

@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { getLocalStorage } from './utiles';
 import { useDispatch } from 'react-redux';
 import { authUser } from './redux/actions/actions';
+import { AUTH_USER } from './redux/types';
 
 function App() {
   const dispatch = useDispatch()
@@ -14,7 +15,7 @@ function App() {
   useEffect(() => {
     const userData = getLocalStorage("session")
     if(userData) {
-      dispatch(authUser(userData))
+      dispatch({type: AUTH_USER, payload: userData})
     }
   }, [])
 

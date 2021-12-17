@@ -1,4 +1,4 @@
-import { AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR } from "../types"
+import { AUTH_USER, CLEAR_AUTH_ERRORS, LOGOUT_USER, SET_AUTH_ERROR } from "../types"
 
 const initialState = {
     isAuth: false,
@@ -14,9 +14,9 @@ const sessionReducer = (state = initialState, action) => {
             return {...state, isAuth: false, userData: {}}
         case SET_AUTH_ERROR:
             const {authKey, value} = action.payload
-            console.log(authKey)
-            console.log(value)
             return {...state, error: {...state.error, [authKey]: value}}
+        case CLEAR_AUTH_ERRORS:
+            return {...state, error: {signin: '', signup: ''}}
         default:
             return state
     }

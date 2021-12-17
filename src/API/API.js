@@ -4,16 +4,15 @@ import axios from "axios"
 
 const ENDPOINT = "https://educhange.herokuapp.com"
 
-const fetcher = async (method, url, body = false, headers = false) => {   
-    const responce = await axios[method](`${ENDPOINT}${url}`, body, headers)
-    return responce.data
+async function fetcher(method, path, payload, configs) {
+   const responce = await (await axios[method](`${ENDPOINT}${path}`, payload, configs))
+   return responce.data
 }
 
 class PostService {
     // AUTHENTICATION
 
     static async sign_up(body) {
-        console.log(body)
         const responce = await fetcher("post", "/sign/up", body)
         return responce
     }

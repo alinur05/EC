@@ -7,11 +7,12 @@ import googleIcon from '../../../../../media/googleIcon.svg'
 import { DARK_BLACK } from '../../../../../media/colors'
 import PostService from '../../../../../API/API'
 import { auth, firebase } from '../../../../../firebase'
-import { useDispatch } from 'react-redux'
-import { authUser } from '../../../../../redux/actions/actions'
-import { setLocalStorage } from '../../../../../utiles'
+import { useDispatch, useSelector } from 'react-redux'
+import { authUser, clearAuthErrors, setAuthError } from '../../../../../redux/actions/actions'
+import { getLocalStorage, setLocalStorage } from '../../../../../utiles'
 import useFetching from '../../../../../hooks/useFetching'
 import useIsInputsFilled from '../../../../../hooks/useIsInputsFilled'
+import ErrorQuery from '../../../../../UI/ErrorQuery'
 
 export default function SignInModal(props) {
     const {
@@ -22,19 +23,21 @@ export default function SignInModal(props) {
     
     const dispatch = useDispatch()
 
-    const [confirmLoading, setConfirmLoading] = useState(false)
+
     const [fields, setFields] = useState({username: "", password: ""})
-    
-    const [fetch, loading, error] = useFetching(async () => {
-        dispatch(authUser(fields))
-        setFields({username: "", password: ""})
-        setSigninModalVisible(false)
+    const {signin} = useSelector(state => state.session.error)
+
+    const [signIn, loading, error] = useFetching(async body => {
+        dispatch(authUser(body))
+        error && dispatch(setAuthError("signin", error))
     })
 
     const handleSignIn = async () => {
-        fetch()
-        console.log(loading)
-        console.log(error)
+        signIn(fields)
+        const session = getLocalStorage("session")
+        if(session) {
+            handleModalCancel()
+        }
     }
 
     const handleGoogleSignIn = async () => {
@@ -46,7 +49,11 @@ export default function SignInModal(props) {
             username: user.displayName.split(' ').join('')
         }
         
-        dispatch(authUser(body))
+        signIn(body)
+        const session = getLocalStorage("session")
+        if(session) {
+            handleModalCancel()
+        }
     }
     
     const handleAlreadyHasAccount = () => {
@@ -54,14 +61,20 @@ export default function SignInModal(props) {
         setSignupModalVisible(true)
     }
 
+    const handleModalCancel = () => {
+        setSigninModalVisible(false)
+        setFields({username: "", password: ""})
+        dispatch(clearAuthErrors())
+    }
+
     return (
         <SModal
             title={false}
             visible={signinModalVisible}
-            confirmLoading={confirmLoading}
             footer={false}
             header={false}
-            onCancel={() => setSigninModalVisible(false)}
+            confirmLoading={loading}
+            onCancel={handleModalCancel}
             bodyStyle={{width: "450px"}}
         >
             <ModalHeader>
@@ -83,6 +96,7 @@ export default function SignInModal(props) {
             </ModalBody>
             <ModalFooter>
                 <SignUpBtn style={{fontSize: "16px", padding: "9px 50px"}} onClick={handleSignIn}>Войти</SignUpBtn>
+                <ErrorQuery error={signin} />
             </ModalFooter>
             <SigninPropmt onClick={handleAlreadyHasAccount}>Еще нет аккаунта? Регистрация</SigninPropmt>
         </SModal>
@@ -141,9 +155,10 @@ const Field = styled.input`
 `
 const ModalFooter = styled(Flex)`
     width: 100%;
-    padding: 20px 0x;
     justify-content:center;
     align-items:center;
+    flex-direction:column;
+    gap: 15px
 `
 const SigninPropmt = styled.span`
     position: absolute;
