@@ -15,9 +15,9 @@ export default function AuthBlock() {
     return (
         <SAuthBlock>
             <SignInBtn onClick={() => setSigninModalVisible(true)}>Войти</SignInBtn>
-                <SignInModal signinModalVisible={signinModalVisible} setSigninModalVisible={setSigninModalVisible} />
+                <SignInModal setSigninModalVisible={setSigninModalVisible} setSignupModalVisible={setSignupModalVisible} signinModalVisible={signinModalVisible}  />
             <SignUpBtn onClick={() => setSignupModalVisible(true)}>Регистрация</SignUpBtn>
-                <SignUpModal signupModalVisible={signupModalVisible} setSignupModalVisible={setSignupModalVisible} />
+                <SignUpModal setSigninModalVisible={setSigninModalVisible} signupModalVisible={signupModalVisible} setSignupModalVisible={setSignupModalVisible} />
         </SAuthBlock>
     )
 }

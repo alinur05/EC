@@ -16,8 +16,6 @@ function App() {
     if(userData) {
       dispatch(authUser(userData))
     }
-
-    return () => console.log("clearn up!")
   }, [])
 
   return (

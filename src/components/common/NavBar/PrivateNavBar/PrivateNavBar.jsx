@@ -7,14 +7,11 @@ import ProfileBlock from './ProfileBlock/ProfileBlock'
 export default function PrivateNavBar() {
     return (
         <SPrivateNavBar>
-            <GetLogo />
 
-            <ProfileBlock />
         </SPrivateNavBar>
     )
 }
 
 const SPrivateNavBar = styled(Flex)`
-    width: 100%;
     justify-content:space-between;
 `

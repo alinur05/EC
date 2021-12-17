@@ -2,17 +2,23 @@ import React from 'react'
 import styled from 'styled-components'
 import Flex from '../../../UI/Flex'
 import GetLogo from '../../../UI/GetLogo'
-import Links from './PublicNavBar/Links'
 import AuthBlock from './PublicNavBar/AuthBlock/AuthBlock'
 import { useSelector } from 'react-redux'
 import PublicNavBar from './PublicNavBar/PublicNavBar'
 import PrivateNavBar from './PrivateNavBar/PrivateNavBar'
+import { DARK_BLACK, WHITE } from '../../../media/colors'
+import {SearchOutlined} from '@ant-design/icons'
+import MiddleNavBar from './MiddleNavBar/MiddleNavBar'
 
 export default function NavBar() {
     const isAuth = useSelector(state => state.session.isAuth)
 
     return (
         <SNavBar>
+            <Left>
+                <GetLogo />
+                <MiddleNavBar />
+            </Left>
             {
                 isAuth ?
                     <PrivateNavBar /> 
@@ -31,4 +37,7 @@ const SNavBar = styled(Flex)`
     align-items:center;
     justify-content:space-between;
     box-shadow: 0 0 30px #e3e3e3;
+`
+const Left = styled(Flex)`
+    gap: 20px;
 `

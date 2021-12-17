@@ -1,8 +1,6 @@
 
 
 export const signupFieldsValidator = (fields) => {
-    console.log(fields)
-
     let result = {
         isValid: true,
         error: ""
@@ -28,5 +26,5 @@ export const signupFieldsValidator = (fields) => {
 
 export const getLocalStorage = (key) => JSON.parse(localStorage.getItem(key))
 export const removeLocalStorage = (key = "session") => localStorage.removeItem(key)
-export const setLocalStorage = (value, key = "session") => localStorage.setItem(key, JSON.stringify(value))
+export const setLocalStorage = (key = "session", value) => localStorage.setItem(key, JSON.stringify(value))
 

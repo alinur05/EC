@@ -10,23 +10,31 @@ import { auth, firebase } from '../../../../../firebase'
 import { useDispatch } from 'react-redux'
 import { authUser } from '../../../../../redux/actions/actions'
 import { setLocalStorage } from '../../../../../utiles'
+import useFetching from '../../../../../hooks/useFetching'
+import useIsInputsFilled from '../../../../../hooks/useIsInputsFilled'
 
 export default function SignInModal(props) {
-    const dispatch = useDispatch()
-
     const {
         setSigninModalVisible,
-        signinModalVisible
+        signinModalVisible,
+        setSignupModalVisible
     } = props
+    
+    const dispatch = useDispatch()
 
     const [confirmLoading, setConfirmLoading] = useState(false)
     const [fields, setFields] = useState({username: "", password: ""})
     
-    const handleSignIn = async () => {
-        const responce = await PostService.sign_in(fields)
-        console.log(responce)
+    const [fetch, loading, error] = useFetching(async () => {
+        dispatch(authUser(fields))
         setFields({username: "", password: ""})
         setSigninModalVisible(false)
+    })
+
+    const handleSignIn = async () => {
+        fetch()
+        console.log(loading)
+        console.log(error)
     }
 
     const handleGoogleSignIn = async () => {
@@ -38,16 +46,14 @@ export default function SignInModal(props) {
             username: user.displayName.split(' ').join('')
         }
         
-        const responce = await PostService.sign_in(body)
-        if(responce.value) {
-            dispatch(authUser(responce.value))
-            setLocalStorage(responce.value)
-            setSigninModalVisible(false)
-        }else {
-            console.log(responce.details)
-        }
+        dispatch(authUser(body))
     }
     
+    const handleAlreadyHasAccount = () => {
+        setSigninModalVisible(false)
+        setSignupModalVisible(true)
+    }
+
     return (
         <SModal
             title={false}
@@ -78,7 +84,7 @@ export default function SignInModal(props) {
             <ModalFooter>
                 <SignUpBtn style={{fontSize: "16px", padding: "9px 50px"}} onClick={handleSignIn}>Войти</SignUpBtn>
             </ModalFooter>
-            <SigninPropmt>Уже есть аккаунт? Регистрация</SigninPropmt>
+            <SigninPropmt onClick={handleAlreadyHasAccount}>Еще нет аккаунта? Регистрация</SigninPropmt>
         </SModal>
     )
 }
@@ -109,12 +115,12 @@ const OrBlock = styled(Flex)`
 `
 const OrItem = styled.span`
     color: #C1C1C1;
+    display: inline;
     font-size: 14px;
     ${props => props.line && css `
-        display:block;
         width: 150px;
-        height: 1px;
         background: #C1C1C1;
+        height: 1px;
     `}
 `
 const ModalBody = styled(Flex)`

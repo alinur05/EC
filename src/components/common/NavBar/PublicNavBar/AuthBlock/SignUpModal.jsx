@@ -7,9 +7,27 @@ import { DARK_BLACK } from '../../../../../media/colors'
 import { signupFieldsValidator } from '../../../../../utiles'
 import PostService from '../../../../../API/API'
 import { auth, firebase } from '../../../../../firebase'
+import {signUpUser, setAuthError} from '../../../../../redux/actions/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import ErrorQuery from '../../../../../UI/ErrorQuery'
+import useFetching from '../../../../../hooks/useFetching'
 
 export default function SignUpModal(props) {
-    const [confirmLoading, setconfirmLoading] = useState(false)
+
+    const { 
+        setSigninModalVisible,
+        setSignupModalVisible,
+        signupModalVisible,
+    } = props
+
+    const dispatch = useDispatch()
+    const {signup} = useSelector(state => state.session.error)
+
+    const [fetchData, loading, fetchError] = useFetching(async body => {
+        console.log("fetching..")
+        dispatch(signUpUser(body))
+    })
+
     const [fields, setFields] = useState({
         fullName: "",
         username: "",
@@ -17,11 +35,6 @@ export default function SignUpModal(props) {
         email: "",
         repeat_password: ""
     })
-
-    const {
-        setSignupModalVisible,
-        signupModalVisible,
-    } = props
 
     const handleGoogleSignUp = async () => {
         const provider = new firebase.auth.GoogleAuthProvider()
@@ -45,25 +58,41 @@ export default function SignUpModal(props) {
             let body = {...fields}
             delete body.repeat_password
 
-            const responce = await PostService.sign_up(body)
-            console.log(responce)
-            setFields({fullName: "",username: "",password: "",repeat_password: "", email: ""})
-            setSignupModalVisible(false)
+            // dispatch(signUpUser(body))
+            fetchData()
+
+            if(fetchError) {
+                fetchError && dispatch(setAuthError("signup", fetchError))
+            }else {
+                setFields({fullName: "",username: "",password: "",repeat_password: "", email: ""})
+                setSignupModalVisible(false)
+                dispatch(setAuthError("signup", ""))
+            }
         }else {
-            console.log(responce.error)
+            dispatch(setAuthError("signup", responce.error))
         }
     }
+   
+    const handleAlreadyHasAccount = () => {
+        setSignupModalVisible(false)
+        setSigninModalVisible(true)
+    }
 
-
+    const handleModalCancel = () => {
+        setSignupModalVisible(false)
+        dispatch(setAuthError("signup", ""))
+        setFields({fullName: "",username: "",password: "",repeat_password: "", email: ""})
+    }
+    
     return (
         <SModal
                 title={false}
                 visible={signupModalVisible}
-                confirmLoading={confirmLoading}
+                confirmLoading={loading}
                 footer={false}
                 header={false}
-                onCancel={() => setSignupModalVisible(false)}
-                bodyStyle={{width: "450px"}}
+                onCancel={handleModalCancel}
+                bodyStyle={{width: "450px", marginBottom: "100px"}}
             >
                 <ModalHeader>
                     <ModalTitle>Регистрация</ModalTitle>
@@ -80,16 +109,21 @@ export default function SignUpModal(props) {
                     </OrBlock>
                 </ModalHeader>
                 <ModalBody>
-                    <Field type="text" placeholder="Полное имя" value={fields.fullName} onChange={e => setFields({...fields, fullName: e.target.value})} />
                     <Field type="text" placeholder="email" value={fields.email} onChange={e => setFields({...fields, email: e.target.value})} />
-                    <Field type="text" placeholder="Логин" value={fields.username} onChange={e => setFields({...fields, username: e.target.value})} />
-                    <Field type="password" placeholder="Пароль" value={fields.password} onChange={e => setFields({...fields, password: e.target.value})} />
-                    <Field type="password" placeholder="Повторите пароль еще раз" value={fields.repeat_password} onChange={e => setFields({...fields, repeat_password: e.target.value})} />
+                    <Flex gap="10px" width="100%">
+                        <Field width="145px" type="text" placeholder="Полное имя" value={fields.fullName} onChange={e => setFields({...fields, fullName: e.target.value})} />
+                        <Field width="145px" type="text" placeholder="Логин" value={fields.username} onChange={e => setFields({...fields, username: e.target.value})} />
+                    </Flex>
+                    <Flex gap="10px" width="100%">
+                        <Field width="145px" type="password" placeholder="Пароль" value={fields.password} onChange={e => setFields({...fields, password: e.target.value})} />
+                        <Field width="145px" type="password" placeholder="Повторите пароль еще раз" value={fields.repeat_password} onChange={e => setFields({...fields, repeat_password: e.target.value})} />
+                    </Flex>
                 </ModalBody>
                 <ModalFooter>
                     <SignUpBtn style={{fontSize: "16px", padding: "9px 50px"}} onClick={handleSignUp}>Регистрация</SignUpBtn>
+                    <ErrorQuery error={signup}/>
                 </ModalFooter>
-                <SigninPropmt>Уже есть аккаунт? Войти</SigninPropmt>
+                <SigninPropmt onClick={handleAlreadyHasAccount}>Уже есть аккаунт? Войти</SigninPropmt>
             </SModal>
     )
 }
@@ -125,12 +159,12 @@ const OrBlock = styled(Flex)`
 `
 const OrItem = styled.span`
     color: #C1C1C1;
+    display: inline;
     font-size: 14px;
     ${props => props.line && css `
-        display:block;
         width: 150px;
-        height: 2px;
         background: #C1C1C1;
+        height: 1px;
     `}
 `
 const ModalBody = styled(Flex)`
@@ -141,7 +175,7 @@ const ModalBody = styled(Flex)`
     gap: 20px;
 `
 const Field = styled.input`
-    width: 300px;
+    width: ${({width}) => width || "300px"};
     padding: 10px 15px;
     outline: none;
     color: #676E8B;
@@ -152,8 +186,10 @@ const Field = styled.input`
 const ModalFooter = styled(Flex)`
     width: 100%;
     padding: 20px 0x;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
+    gap: 15px;
 `
 const SigninPropmt = styled.span`
     position: absolute;

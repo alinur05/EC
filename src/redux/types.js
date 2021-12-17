@@ -3,3 +3,4 @@
 
 export const AUTH_USER = "AUTH/AUTH_USER"
 export const LOGOUT_USER = "AUTH/LOGOUT_USER"
+export const SET_AUTH_ERROR = "AUTH/SET_AUTH_ERROR"

@@ -1,26 +1,30 @@
 // "http://192.168.0.107:8080"
 
-const ENDPOINT = "http://192.168.0.107:8080"
+import axios from "axios"
+
+const ENDPOINT = "https://educhange.herokuapp.com"
+
+const fetcher = async (method, url, body, headers) => {   
+    const responce = await axios[method](`${ENDPOINT}${url}`, body, headers)
+    return responce.data
+}
 
 class PostService {
+    // AUTHENTICATION
+
     static async sign_up(body) {
-        const responce = await (await fetch(`${ENDPOINT}/sign/up`, {
-            method: "POST",
-            headers: {"Content-Type":"application/json"},
-            body: JSON.stringify(body)
-        })).json()
+        console.log(body)
+        const responce = await fetcher("post", "/sign/up", body)
         return responce
     }
     static async sign_in(body) {
-        const responce = await (await fetch(`${ENDPOINT}/sign/in`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(body)
-        })).json()
+        const responce = await fetcher("post", "/sign/in", body)
         return responce
     }
+
+    // COURSES
     static async getAllCourses() {
-        const responce = await (await fetch(`${ENDPOINT}/api/course/get-all`)).json()
+        const responce = await fetcher("get", "/api/course/get-all")
         return responce
     }
 }

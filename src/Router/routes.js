@@ -1,6 +1,7 @@
-import Profile from "../components/common/PrivateComponents/Profile/Profile"
-import About from "../components/common/PublicComponents/About"
-import Main from "../components/common/PublicComponents/Main"
+import About from "../components/pages/About"
+import Main from "../components/pages/Main"
+import Profile from "../components/pages/Profile"
+
 
 
 export const publicRoutes = [
