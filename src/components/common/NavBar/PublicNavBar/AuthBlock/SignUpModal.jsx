@@ -23,8 +23,7 @@ export default function SignUpModal(props) {
     const dispatch = useDispatch()
     const {signup} = useSelector(state => state.session.error)
 
-    const [fetchData, loading, fetchError] = useFetching(async body => {
-        console.log("fetching..")
+    const [signUp, loading, fetchError] = useFetching(async body => {
         dispatch(signUpUser(body))
     })
 
@@ -58,9 +57,7 @@ export default function SignUpModal(props) {
             let body = {...fields}
             delete body.repeat_password
 
-            // dispatch(signUpUser(body))
-            fetchData()
-
+            signUp()
             if(fetchError) {
                 fetchError && dispatch(setAuthError("signup", fetchError))
             }else {

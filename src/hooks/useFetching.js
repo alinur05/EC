@@ -7,7 +7,7 @@ const useFetching = callback => {
     const fetch = async args => {
         try {
             setLoading(true)
-            return await callback(...args)
+            return await callback(args)
         }catch(e) {
             setError(e.message)
         }finally {

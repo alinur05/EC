@@ -4,7 +4,7 @@ import axios from "axios"
 
 const ENDPOINT = "https://educhange.herokuapp.com"
 
-const fetcher = async (method, url, body, headers) => {   
+const fetcher = async (method, url, body = false, headers = false) => {   
     const responce = await axios[method](`${ENDPOINT}${url}`, body, headers)
     return responce.data
 }
