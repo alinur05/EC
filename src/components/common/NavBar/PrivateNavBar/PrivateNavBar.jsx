@@ -24,7 +24,7 @@ export default function PrivateNavBar() {
             <MenuItem icon={<UserOutlined style={{fontSize: "20px"}} />} onClick={() => history.push("/profile")}>
                 Профиль
             </MenuItem>
-            <MenuItem icon={<LogoutOutlined style={{fontSize: "20px"}} onClick={handleLogout}/>}>
+            <MenuItem icon={<LogoutOutlined style={{fontSize: "20px"}}/>} onClick={handleLogout}>
                 Выйти
             </MenuItem>
         </Menu>

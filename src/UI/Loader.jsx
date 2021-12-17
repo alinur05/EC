@@ -1,7 +1,7 @@
 import { Spin } from 'antd'
 import React from 'react'
 import styled, { css } from 'styled-components'
-import {Flex} from './Flex'
+import Flex from './Flex'
 
 export default function Loader(type="medium") {
     return (
@@ -17,7 +17,9 @@ const SLoader = styled(Flex)`
     align-items:center;
     justify-content:center;
 
+
     ${props => props.large && css`
+        position: fixed;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
     `} 

@@ -5,14 +5,13 @@ import styled, {css} from 'styled-components'
 import Flex from '../../../../../UI/Flex'
 import googleIcon from '../../../../../media/googleIcon.svg'
 import { DARK_BLACK } from '../../../../../media/colors'
-import PostService from '../../../../../API/API'
 import { auth, firebase } from '../../../../../firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import { authUser, clearAuthErrors, setAuthError } from '../../../../../redux/actions/actions'
-import { getLocalStorage, setLocalStorage } from '../../../../../utiles'
+import { getLocalStorage } from '../../../../../utiles'
 import useFetching from '../../../../../hooks/useFetching'
-import useIsInputsFilled from '../../../../../hooks/useIsInputsFilled'
 import ErrorQuery from '../../../../../UI/ErrorQuery'
+import Loader from '../../../../../UI/Loader'
 
 export default function SignInModal(props) {
     const {
@@ -68,38 +67,40 @@ export default function SignInModal(props) {
     }
 
     return (
-        <SModal
-            title={false}
-            visible={signinModalVisible}
-            footer={false}
-            header={false}
-            confirmLoading={loading}
-            onCancel={handleModalCancel}
-            bodyStyle={{width: "450px"}}
-        >
-            <ModalHeader>
-                <ModalTitle>Войти</ModalTitle>
-                    <GoogleIcon 
-                        onClick={handleGoogleSignIn}
-                        src={googleIcon}
-                        alt="googe icon"
-                    />
-                    <OrBlock>
-                        <OrItem line></OrItem>
-                        <OrItem>или</OrItem>
-                        <OrItem line></OrItem>
-                    </OrBlock>
-            </ModalHeader>
-             <ModalBody>
-                    <Field type="text" placeholder="Логин" value={fields.username} onChange={e => setFields({...fields, username: e.target.value})} />
-                    <Field type="password" placeholder="Пароль" value={fields.password} onChange={e => setFields({...fields, password: e.target.value})} />
-            </ModalBody>
-            <ModalFooter>
-                <SignUpBtn style={{fontSize: "16px", padding: "9px 50px"}} onClick={handleSignIn}>Войти</SignUpBtn>
-                <ErrorQuery error={signin} />
-            </ModalFooter>
-            <SigninPropmt onClick={handleAlreadyHasAccount}>Еще нет аккаунта? Регистрация</SigninPropmt>
-        </SModal>
+        <>
+            {loading && <Loader type={"large"}/>}
+            <SModal
+                title={false}
+                visible={signinModalVisible}
+                footer={false}
+                header={false}
+                onCancel={handleModalCancel}
+                bodyStyle={{width: "450px"}}
+            >
+                <ModalHeader>
+                    <ModalTitle>Войти</ModalTitle>
+                        <GoogleIcon 
+                            onClick={handleGoogleSignIn}
+                            src={googleIcon}
+                            alt="googe icon"
+                        />
+                        <OrBlock>
+                            <OrItem line></OrItem>
+                            <OrItem>или</OrItem>
+                            <OrItem line></OrItem>
+                        </OrBlock>
+                </ModalHeader>
+                <ModalBody>
+                        <Field type="text" placeholder="Логин" value={fields.username} onChange={e => setFields({...fields, username: e.target.value})} />
+                        <Field type="password" placeholder="Пароль" value={fields.password} onChange={e => setFields({...fields, password: e.target.value})} />
+                </ModalBody>
+                <ModalFooter>
+                    <SignUpBtn style={{fontSize: "16px", padding: "9px 50px"}} onClick={handleSignIn}>Войти</SignUpBtn>
+                    <ErrorQuery error={signin} />
+                </ModalFooter>
+                <SigninPropmt onClick={handleAlreadyHasAccount}>Еще нет аккаунта? Регистрация</SigninPropmt>
+            </SModal>
+        </>
     )
 }
 

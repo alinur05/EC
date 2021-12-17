@@ -8,6 +8,7 @@ import { getLocalStorage } from './utiles';
 import { useDispatch } from 'react-redux';
 import { authUser } from './redux/actions/actions';
 import { AUTH_USER } from './redux/types';
+import GetFooter from './UI/GetFooter';
 
 function App() {
   const dispatch = useDispatch()
@@ -24,6 +25,7 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <AppRouter />
+        <GetFooter />
       </BrowserRouter>
     </div>
   )

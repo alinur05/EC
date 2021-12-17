@@ -1,4 +1,4 @@
-import { CLEAN_UP_DETAILS, GET_COURSES, GET_COURSE_DETAILS } from "../types"
+import { CLEAN_UP_COURSES, CLEAN_UP_DETAILS, GET_COURSES, GET_COURSE_DETAILS } from "../types"
 
 const initialState = {
     courses: [],
@@ -14,6 +14,8 @@ const coursesReducer = (state = initialState, action) => {
             return {...state, course: course}
         case CLEAN_UP_DETAILS:
             return {...state, course: {}}
+        case CLEAN_UP_COURSES:
+            return {...state, courses: []}
         default:    
             return state
     }
