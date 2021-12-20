@@ -6,10 +6,9 @@ const ENDPOINT = "https://educhange.herokuapp.com"
 const ADMIN_TOKEN = "Basic YWRtaW46YWRtaW4="
 
 async function fetcher(method, path, payload, configs) {
-   const responce = await (await axios[method](`${ENDPOINT}${path}`, payload, configs))
-   return responce.data
-}
-
+    return await (await axios[method](`${ENDPOINT}${path}`, payload, configs))
+ }
+ 
 class PostService {
     // AUTHENTICATION
 
