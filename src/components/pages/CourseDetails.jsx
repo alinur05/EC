@@ -45,7 +45,7 @@ export default function CourseDetails() {
                     <Flex width="100%" justify="space-between">
                         <Flex direction="column">
                             <Flex gap="10px" color="#fff" align="center">
-                                <Author>Уроков: {course.lessons && course.lessons.length}</Author>
+                                <Author>Уроков: {course.lessonCount && course.lessonCount}</Author>
                             </Flex>
                             <Flex gap="10px" color="#fff" align="center">
                                 <Author>Автор: {course.courseModel && course.courseModel.userId}</Author>
@@ -124,7 +124,7 @@ export default function CourseDetails() {
                     </LessonsBlock>
                     <CommentBlock />
                 </LeftContent>
-                <RightBar cost={course.courseModel && course.courseModel.price} lessons={course.lessons && course.lessons.length} />
+                <RightBar cost={course.courseModel && course.courseModel.price} lessons={course.lessonCount && course.lessonCount} />
             </ContentWrapper>
         </div>
     )
@@ -253,11 +253,7 @@ const ButBtn = styled.button`
     border: none;
     cursor:pointer;
     padding: 3px 50px;
-    background: ${WHITE};
+    background: ${YELLOW};
     border-radius: 5px;
     font-size: 18px;
-
-    &:hover {
-        opacity: 0.7
-    }
 `

@@ -15,4 +15,5 @@ const SContentWrapper = styled(Flex)`
     width: 100%;
     padding: ${({padding}) => padding || "30px 50px"};
     flex-direction:column;
+    flex-wrap:wrap;
 `

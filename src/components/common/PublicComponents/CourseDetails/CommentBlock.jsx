@@ -11,7 +11,7 @@ export default function CommentBlock() {
 
     return (
         <SCommentBlock>
-            <CommentTitle>Отзывы</CommentTitle>
+            <CommentTitle>Комментарии</CommentTitle>
             <CommentList>
                 {
                         course.comments &&
@@ -30,7 +30,7 @@ export default function CommentBlock() {
 
                     :
 
-                        <UnFound text="Пока нет отзывов.." size="20px" color="gray" />
+                        <UnFound text="Пока нет комментариев.." size="20px" color="gray" />
                 }
             </CommentList>
         </SCommentBlock>

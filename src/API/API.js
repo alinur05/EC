@@ -1,8 +1,9 @@
 // "http://192.168.0.107:8080"
+// https://educhange.herokuapp.com
 
 import axios from "axios"
 
-const ENDPOINT = "http://192.168.0.107:8080/api"
+const ENDPOINT = "https://educhange.herokuapp.com/api"
 const ADMIN_TOKEN = "Basic YWRtaW46YWRtaW4="
 
 async function fetcher(method, path, payload, configs) {
@@ -46,11 +47,7 @@ class PostService {
         return splittedCourses
     }
     static async getCourseDetails(id) {
-        const fetchLessons = await axios.get(`${ENDPOINT}/lesson/get-all/by-course-id/${id}`, {
-            headers: {
-                Authorization: ADMIN_TOKEN
-            }
-        })
+        const fetchLessons = await axios.get(`${ENDPOINT}/lesson/get-first-three/by-course-id/${id}`)
 
         const responce = await fetcher("get", `/course/get/by-id/${id}`)
 

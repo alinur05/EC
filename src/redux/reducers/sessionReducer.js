@@ -14,6 +14,7 @@ const sessionReducer = (state = initialState, action) => {
             return {...state, isAuth: false, userData: {}}
         case SET_AUTH_ERROR:
             const {authKey, value} = action.payload
+            console.log(authKey, value)
             return {...state, error: {...state.error, [authKey]: value}}
         case CLEAR_AUTH_ERRORS:
             return {...state, error: {signin: '', signup: ''}}

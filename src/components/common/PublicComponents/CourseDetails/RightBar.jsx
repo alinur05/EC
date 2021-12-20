@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { WHITE } from '../../../../media/colors'
+import { WHITE, YELLOW } from '../../../../media/colors'
 import Flex from '../../../../UI/Flex'
 
 export default function RightBar({cost, lessons}) {
@@ -37,16 +37,11 @@ const BuyBtn = styled.button`
     width: 100%;
     text-align:center;
     padding: 5px 0px;
-    background: ${WHITE};
+    background: ${YELLOW};
     border-radius: 5px;
     cursor:pointer;
     font-size: 18px;
     border: none;
-
-    &:hover {
-        opacity: 0.6
-    }
-
 `
 const Body = styled(Flex)`
     width: 100%;

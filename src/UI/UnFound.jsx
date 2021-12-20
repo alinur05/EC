@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { WHITE } from '../media/colors'
 import Flex from './Flex'
 
 export default function UnFound({text, color, size}) {
@@ -19,5 +20,5 @@ const SUnFound = styled(Flex)`
 const Text = styled.h3`
     margin: 0;
     font-size: ${({size}) => size || "26px"};
-    color: ${({color}) => color || "#000"};
+    color: ${({color}) => color || "#aeaeae"};
 `

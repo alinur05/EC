@@ -4,7 +4,7 @@ import { EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_US
 
 // SESSION
 
-export const setAuthError = (authKey, value = "") => ({type: SET_AUTH_ERROR, payload: {authKey, value}})
+export const setAuthError = (authKey, value) => ({type: SET_AUTH_ERROR, payload: {authKey, value}})
 
 export const clearAuthErrors = () => ({type: CLEAR_AUTH_ERRORS})
 
@@ -25,6 +25,7 @@ export const authUser = body => async dispatch => {
     const responce = await PostService.sign_in(body)
 
     if(responce.status === "FAIL") {
+        console.log(responce.details)
         dispatch(setAuthError("signin", responce.details))
     }else {
         setLocalStorage("session", responce.value)

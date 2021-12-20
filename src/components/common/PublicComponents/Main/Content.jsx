@@ -8,6 +8,7 @@ import { cleanCourses, getCoures } from '../../../../redux/actions/actions'
 import Loader from '../../../../UI/Loader'
 import Error from '../../../../UI/Error'
 import Cards from './Cards/Cards'
+import UnFound from '../../../../UI/UnFound'
 
 export default function Content() {
     const dispatch = useDispatch()
@@ -28,10 +29,19 @@ export default function Content() {
 
     return (
         <SContent>
-            <ContentHeader>
-                <Title>Курсы</Title>
-                <P>Выбирайте из {courses.length} онлайн-видеокурсов;</P>
-            </ContentHeader>
+                {loading && <Loader type="large" />}
+                {
+                    courses.length ?
+                    <ContentHeader>
+                        <Title>Курсы</Title>
+                        <P>Выбирайте из {courses.length} онлайн-видеокурсов;</P>
+                    </ContentHeader>
+                    :
+                    <UnFound 
+                        text="Пока нет курсов.."
+                    />
+                }
+
             <CoursesContent>
                 <Cards />
             </CoursesContent>
