@@ -2,7 +2,7 @@
 
 import axios from "axios"
 
-const ENDPOINT = "https://educhange.herokuapp.com/api"
+const ENDPOINT = "http://192.168.0.107:8080/api"
 const ADMIN_TOKEN = "Basic YWRtaW46YWRtaW4="
 
 async function fetcher(method, path, payload, configs) {
@@ -11,14 +11,15 @@ async function fetcher(method, path, payload, configs) {
  }
  
 class PostService {
+
     // AUTHENTICATION
 
     static async sign_up(body) {
-        const responce = await fetcher("post", "/user/sign/up", body)
+        const responce = await fetcher("post", "/user/sign-up", body)
         return responce
     }
     static async sign_in(body) {
-        const responce = await fetcher("post", "/user//sign/in", body)
+        const responce = await fetcher("post", "/user/sign-in", body)
         return responce
     }
 

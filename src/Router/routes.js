@@ -3,13 +3,15 @@ import Category from "../components/pages/Category"
 import Main from "../components/pages/Main"
 import Profile from "../components/pages/Profile"
 import CourseDetails from '../components/pages/CourseDetails'
+import ResetPassword from "../components/pages/ResetPassword"
 
 
 export const publicRoutes = [
     {path: "/main", component: Main},
     {path: "/about", component: About},
     {path: "/courses/details/:id", component: CourseDetails, exact: true},
-    {path: "/category/:name", component: Category, exact: true}
+    {path: "/category/:name", component: Category, exact: true},
+    {path: "/api/mail/reset-password", component: ResetPassword, exact: true},
 ]
 
 export const privateRoutes = [
@@ -17,6 +19,7 @@ export const privateRoutes = [
     {path: "/about", component: About, exact: false},
     {path: "/category/:name", component: Category, exact: true},
     {path: "/courses/details/:id", component: CourseDetails, exact: true},
-    {path: "/profile", component: Profile, exact: false}
+    {path: "/profile", component: Profile, exact: false},
+    {path: "/api/mail/reset-password", component: ResetPassword, exact: true},
 ]
 
