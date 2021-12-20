@@ -44,7 +44,7 @@ class PostService {
         return splittedCourses
     }
     static async getCourseDetails(id) {
-        const fetchLessons = await axios.get(`https://educhange.herokuapp.com/api/lesson/get-all/by-course-id/${id}`, {headers: {"Authorization": ADMIN_TOKEN}})
+        const fetchLessons = await axios.get(`${ENDPOINT}/api/lesson/get-all/by-course-id/${id}`, {headers: {"Authorization": ADMIN_TOKEN}})
 
         const responce = await fetcher("get", `/api/course/get/by-id/${id}`)
 
@@ -56,7 +56,7 @@ class PostService {
         return result
     }
     static async editProfile(body) {
-        
+
     }
 }
 
