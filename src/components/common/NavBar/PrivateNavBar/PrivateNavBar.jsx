@@ -31,7 +31,7 @@ export default function PrivateNavBar() {
       )
 
     return (
-        <Dropdown overlay={menu}>
+        <Dropdown overlay={menu} style={{alignItems:"center"}}>
             <SPrivateNavBar>
                 <Right>
                     <Img src={userData.userImageModel ? userData.userImageModel : defaultUserAva}/>

@@ -2,9 +2,11 @@ import React from 'react'
 import styled, {css} from 'styled-components'
 
 const SFlex = styled.div`
+    width: ${({width}) => width || "auto"};
+    height: ${({height}) => height || "auto"};
     display:flex;
     flex-direction: ${({direction}) => direction || "row"};
-    justify-content: ${({justify}) => justify || "flex-start"}'
+    justify-content: ${({justify}) => justify || "flex-start"};
     align-items: ${({align}) => align || "flex-start"};
     gap: ${({gap}) => gap || "0px"};
     background: ${({bg}) => bg || ""};

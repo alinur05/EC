@@ -40,4 +40,5 @@ const SNavBar = styled(Flex)`
 `
 const Left = styled(Flex)`
     gap: 20px;
+    align-items:center;
 `

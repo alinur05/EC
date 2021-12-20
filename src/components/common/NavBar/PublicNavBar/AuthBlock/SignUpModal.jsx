@@ -109,11 +109,11 @@ export default function SignUpModal(props) {
                 </ModalHeader>
                 <ModalBody>
                     <Field type="text" placeholder="email" value={fields.email} onChange={e => setFields({...fields, email: e.target.value})} />
-                    <Flex gap="10px" width="100%">
+                    <Flex gap="10px" width="100%" justify="center">
                         <Field width="145px" type="text" placeholder="Полное имя" value={fields.fullName} onChange={e => setFields({...fields, fullName: e.target.value})} />
                         <Field width="145px" type="text" placeholder="Логин" value={fields.username} onChange={e => setFields({...fields, username: e.target.value})} />
                     </Flex>
-                    <Flex gap="10px" width="100%">
+                    <Flex gap="10px" width="100%" justify="center">
                         <Field width="145px" type="password" placeholder="Пароль" value={fields.password} onChange={e => setFields({...fields, password: e.target.value})} />
                         <Field width="145px" type="password" placeholder="Повторите пароль еще раз" value={fields.repeat_password} onChange={e => setFields({...fields, repeat_password: e.target.value})} />
                     </Flex>
@@ -168,6 +168,7 @@ const OrItem = styled.span`
 `
 const ModalBody = styled(Flex)`
     width: 100%;
+    height: 100%;
     padding: 20px 0px;
     flex-direction:column;   
     align-items:center;

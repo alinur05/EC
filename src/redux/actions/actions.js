@@ -1,6 +1,6 @@
 import PostService from '../../API/API'
 import { removeLocalStorage, setLocalStorage } from '../../utiles'
-import {AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS} from '../types'
+import { EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS} from '../types'
 
 // SESSION
 
@@ -39,3 +39,35 @@ export const logoutUser = () => {
 }
 
 
+// COURSES
+
+export const getCoures = (token) => async dispatch => {
+    const responce = await PostService.getAllCourses()
+    const {allCourses, categories} = responce
+    const splittedByCategories = await PostService.getCoursesByCategoryId(categories.value, token)
+
+    if(allCourses.status === "FAIL" ) {
+        throw new Error(allCourses.details)
+    }else if(categories.status === "FAIL") {
+        throw new Error(categories.details)
+    }
+
+    dispatch({type: GET_ALL_COURSES, payload: allCourses.value})
+    dispatch({type: GET_CATEGORIES, payload: categories.value})
+    dispatch({type: SPLIT_BY_CATEGIRES, payload: splittedByCategories})
+}
+
+export const cleanCourses = () => ({type: CLEAN_UP_ALL_COURSES})
+
+export const clearCourseDetails = () => ({type: CLEAN_UP_DETAILS})
+export const getCourseDetails = id => async dispatch => {
+    const responce = await PostService.getCourseDetails(id)
+    dispatch({type: GET_COURSE_DETAILS, payload: responce})
+}
+
+// PROFILE
+
+export const editProfile = (body) => async dispatch => {
+    const responce = await PostService.editProfile(body)
+    dispatch({type: EDIT_PROFILE, paylaod: responce.value})
+}

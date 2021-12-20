@@ -1,21 +1,23 @@
-import { CLEAN_UP_COURSES, CLEAN_UP_DETAILS, GET_COURSES, GET_COURSE_DETAILS } from "../types"
+import { CLEAN_UP_ALL_COURSES, CLEAN_UP_DETAILS, GET_ALL_COURSES, GET_COURSE_DETAILS, SPLIT_BY_CATEGIRES } from "../types"
 
 const initialState = {
-    courses: [],
-    course: {}
+    allCourses: [],
+    course: {},
+    coursesSplittedByCategories: []
 }
 
 const coursesReducer = (state = initialState, action) => {
     switch(action.type) {
-        case GET_COURSES:
-            return {...state, courses: action.payload}
+        case GET_ALL_COURSES:
+            return {...state, allCourses: action.payload}
         case GET_COURSE_DETAILS: 
-            const course = [...state.courses].find(item => item.courseModel.id == action.payload)
-            return {...state, course: course}
+            return {...state, course: action.payload}
         case CLEAN_UP_DETAILS:
             return {...state, course: {}}
-        case CLEAN_UP_COURSES:
-            return {...state, courses: []}
+        case CLEAN_UP_ALL_COURSES:
+            return {...state, allCourses: []}
+        case SPLIT_BY_CATEGIRES:
+            return {...state, coursesSplittedByCategories: action.payload}
         default:    
             return state
     }
