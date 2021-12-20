@@ -2,34 +2,36 @@
 
 import axios from "axios"
 
-const ENDPOINT = "https://educhange.herokuapp.com"
+const ENDPOINT = "https://educhange.herokuapp.com/api"
 const ADMIN_TOKEN = "Basic YWRtaW46YWRtaW4="
 
 async function fetcher(method, path, payload, configs) {
-    return await (await axios[method](`${ENDPOINT}${path}`, payload, configs))
+    const responce = await (await axios[method](`${ENDPOINT}${path}`, payload, configs))
+    return responce.data
  }
  
 class PostService {
     // AUTHENTICATION
 
     static async sign_up(body) {
-        const responce = await fetcher("post", "/sign/up", body)
+        const responce = await fetcher("post", "/user/sign/up", body)
         return responce
     }
     static async sign_in(body) {
-        const responce = await fetcher("post", "/sign/in", body)
+        const responce = await fetcher("post", "/user//sign/in", body)
         return responce
     }
 
     // COURSES
     static async getAllCourses() {
-        const allCourses = await fetcher("get", "/api/course/get-all")
-        const categories = await fetcher("get", "/api/category/get-all")
+        const allCourses = await fetcher("get", "/course/get-all")
+        const categories = await fetcher("get", "/category/get-all")
+        console.log(categories)
         return {allCourses, categories}
     }
     static async getCoursesByCategoryId(categories) {
         let coursesSplittedByCategories = categories.map(async category => {
-            const responce = await fetcher("get", `/api/course/get-all/by-category-id/${category.id}`)
+            const responce = await fetcher("get", `/course/get-all/by-category-id/${category.id}`)
 
             const data = {
                 categoryName: category.categoryName,
@@ -43,9 +45,13 @@ class PostService {
         return splittedCourses
     }
     static async getCourseDetails(id) {
-        const fetchLessons = await axios.get(`${ENDPOINT}/api/lesson/get-all/by-course-id/${id}`, {headers: {"Authorization": ADMIN_TOKEN}})
+        const fetchLessons = await axios.get(`${ENDPOINT}/lesson/get-all/by-course-id/${id}`, {
+            headers: {
+                Authorization: ADMIN_TOKEN
+            }
+        })
 
-        const responce = await fetcher("get", `/api/course/get/by-id/${id}`)
+        const responce = await fetcher("get", `/course/get/by-id/${id}`)
 
         let result = {
             ...responce.value,

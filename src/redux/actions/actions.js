@@ -44,6 +44,7 @@ export const logoutUser = () => {
 export const getCoures = (token) => async dispatch => {
     const responce = await PostService.getAllCourses()
     const {allCourses, categories} = responce
+    console.log(categories.value)
     const splittedByCategories = await PostService.getCoursesByCategoryId(categories.value, token)
 
     if(allCourses.status === "FAIL" ) {
@@ -62,6 +63,7 @@ export const cleanCourses = () => ({type: CLEAN_UP_ALL_COURSES})
 export const clearCourseDetails = () => ({type: CLEAN_UP_DETAILS})
 export const getCourseDetails = id => async dispatch => {
     const responce = await PostService.getCourseDetails(id)
+    console.log(responce)
     dispatch({type: GET_COURSE_DETAILS, payload: responce})
 }
 
