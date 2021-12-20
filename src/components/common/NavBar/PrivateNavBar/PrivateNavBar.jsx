@@ -34,7 +34,7 @@ export default function PrivateNavBar() {
         <Dropdown overlay={menu} style={{alignItems:"center"}}>
             <SPrivateNavBar>
                 <Right>
-                    <Img src={userData.userImageModel ? userData.userImageModel : defaultUserAva}/>
+                    <Img src={userData.userImageModel ? userData.userImageModel.userImageUrl : defaultUserAva}/>
                 </Right>
                 <Left>
                     <BalanceText>Баланс:</BalanceText>

@@ -17,6 +17,7 @@ class PostService {
 
     static async sign_up(body) {
         const responce = await fetcher("post", "/user/sign-up", body)
+        console.log(responce)
         return responce
     }
     static async sign_in(body) {
@@ -58,8 +59,30 @@ class PostService {
 
         return result
     }
+
+    // COURSE
+
+    static async commentCourse(body, token) {
+        console.log(token)
+        const commentCourse = await fetcher("post", "/comment/create", body, {
+            headers: {
+                Authorization: token
+            }
+        })
+        console.log(commentCourse)
+        return commentCourse
+    }
+    // PROFILE
     static async editProfile(body) {
 
+    }
+    static async editAva(file, token) {
+        const responce = await fetcher("put", "/api/user-image/update", file, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return responce
     }
 }
 

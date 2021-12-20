@@ -1,23 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Flex from '../../../../../UI/Flex'
 import defaultUserAva from '../../../../../media/defaultUserAva.png'
 import { useSelector } from 'react-redux'
 import ContentBlock from './ContentBlock'
+import { useDispatch } from 'react-redux'
+import { getLocalStorage } from '../../../../../utiles'
+import { editAva } from '../../../../../redux/actions/actions'
 
 export default function ProfileBlock() {
+    const dispatch = useDispatch()
     const userData = useSelector(state => state.session.userData)
+    const [file, setFile] = useState(null)
+    
+    const handleEditAva = () => {
+        const session = getLocalStorage("session")
+        const formData = new FormData()
+        formData.append("file", file)
+
+        dispatch(editAva(formData, session.token))
+    }
+
 
     return (
         <SProfileBlock>
             <AvaBlock>
                 <AvaWrapperBlock>
                     <Ava 
-                        src={userData.userImageModel ? userData.userImageModel : defaultUserAva}
+                        src={userData.userImageModel ? userData.userImageModel.userImageUrl : defaultUserAva}
                     />
+                    <button><label htmlFor='ava'>
+                        select image
+                    </label></button>
                 </AvaWrapperBlock>
-                <ChangeAvaBtn>
-                    Изменить аватар
+                <input type="file" id="ava" style={{display: "none"}} value={file} onChange={e => setFile(e.target.files[0])}/>
+                <ChangeAvaBtn onClick={handleEditAva}>
+                    <label htmlFor='ava'>
+                        Изменить аватар
+                    </label>
                 </ChangeAvaBtn>
             </AvaBlock>
             <ContentBlock />

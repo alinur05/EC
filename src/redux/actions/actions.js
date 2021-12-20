@@ -1,6 +1,6 @@
 import PostService from '../../API/API'
 import { removeLocalStorage, setLocalStorage } from '../../utiles'
-import { EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS} from '../types'
+import { COMMENT_COURSE, EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS} from '../types'
 
 // SESSION
 
@@ -68,9 +68,21 @@ export const getCourseDetails = id => async dispatch => {
     dispatch({type: GET_COURSE_DETAILS, payload: responce})
 }
 
+// COURSE
+
+export const commentCourse = (body, token) => async dispatch => {
+    const responce = await PostService.commentCourse(body, token)
+    dispatch({type: COMMENT_COURSE, payload: responce.value})
+}
+
 // PROFILE
 
 export const editProfile = (body) => async dispatch => {
     const responce = await PostService.editProfile(body)
     dispatch({type: EDIT_PROFILE, paylaod: responce.value})
+}
+export const editAva = (file, token) => async dispatch => {
+    const responce = await PostService.editAva(file, token)
+    console.log(responce)
+    // dispatch({type: EDIT_AVA, payload: responce.value})
 }

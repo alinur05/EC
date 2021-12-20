@@ -4,6 +4,8 @@ import Main from "../components/pages/Main"
 import Profile from "../components/pages/Profile"
 import CourseDetails from '../components/pages/CourseDetails'
 import ResetPassword from "../components/pages/ResetPassword"
+import SearchQuery from "../components/pages/SearchQuery"
+import SearchCategory from "../components/pages/SearchCategory"
 
 
 export const publicRoutes = [
@@ -12,6 +14,8 @@ export const publicRoutes = [
     {path: "/courses/details/:id", component: CourseDetails, exact: true},
     {path: "/category/:name", component: Category, exact: true},
     {path: "/api/mail/reset-password", component: ResetPassword, exact: true},
+    {path: "/category/:categoryId", component: SearchCategory, exact: true},
+    {path: "/search/:query", component: SearchQuery, exact: true},
 ]
 
 export const privateRoutes = [
@@ -21,5 +25,7 @@ export const privateRoutes = [
     {path: "/courses/details/:id", component: CourseDetails, exact: true},
     {path: "/profile", component: Profile, exact: false},
     {path: "/api/mail/reset-password", component: ResetPassword, exact: true},
+    {path: "/category/:categoryId", component: SearchCategory, exact: true},
+    {path: "/search/:query", component: SearchQuery, exact: true},
 ]
 
