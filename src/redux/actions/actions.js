@@ -1,6 +1,6 @@
 import PostService from '../../API/API'
 import { removeLocalStorage, setLocalStorage } from '../../utiles'
-import { COMMENT_COURSE, EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS} from '../types'
+import { GET_COURSES_BY_QUERY, CLEAN_UP_SEARCHED_COURSES, CLEAN_UP_CATEGORY_COURSES, GET_COURSE_BY_CATEGORY, COMMENT_COURSE, EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS} from '../types'
 
 // SESSION
 
@@ -45,7 +45,6 @@ export const logoutUser = () => {
 export const getCoures = (token) => async dispatch => {
     const responce = await PostService.getAllCourses()
     const {allCourses, categories} = responce
-    console.log(categories.value)
     const splittedByCategories = await PostService.getCoursesByCategoryId(categories.value, token)
 
     if(allCourses.status === "FAIL" ) {
@@ -59,13 +58,32 @@ export const getCoures = (token) => async dispatch => {
     dispatch({type: SPLIT_BY_CATEGIRES, payload: splittedByCategories})
 }
 
-export const cleanCourses = () => ({type: CLEAN_UP_ALL_COURSES})
 
+export const cleanCourses = () => ({type: CLEAN_UP_ALL_COURSES})
+export const clearCategoryCourses = () => ({type: CLEAN_UP_CATEGORY_COURSES})
+export const clearSearchedCourses = () => ({type: CLEAN_UP_SEARCHED_COURSES})
 export const clearCourseDetails = () => ({type: CLEAN_UP_DETAILS})
+
 export const getCourseDetails = id => async dispatch => {
     const responce = await PostService.getCourseDetails(id)
     console.log(responce)
     dispatch({type: GET_COURSE_DETAILS, payload: responce})
+}
+
+export const getCourseByCategory = name => async dispatch => {
+    const responce = await PostService.getCourseByCategory(name) 
+    dispatch({type: GET_COURSE_BY_CATEGORY, payload: responce.value})
+}
+
+export const searchQuery = query => async dispatch => {
+    dispatch(clearSearchedCourses())
+    const responce = await PostService.getCourseByQuery(query)
+    console.log(responce)
+    if(responce.status === "FAIL") {
+        throw new Error(responce.details)
+    }else {
+        dispatch({type: GET_COURSES_BY_QUERY, payload: responce.value})
+    }
 }
 
 // COURSE

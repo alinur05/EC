@@ -29,7 +29,6 @@ class PostService {
     static async getAllCourses() {
         const allCourses = await fetcher("get", "/course/get-all")
         const categories = await fetcher("get", "/category/get-all")
-        console.log(categories)
         return {allCourses, categories}
     }
     static async getCoursesByCategoryId(categories) {
@@ -60,6 +59,17 @@ class PostService {
         return result
     }
 
+    static async getCourseByCategory(name) {
+        const responce = await fetcher("get", `/course/get-all/by-category-name/${name}`)
+        return responce
+    }
+
+
+    static async getCourseByQuery(query) {
+        const responce = await fetcher("get", `/course/get-all/by-name/${query}`)
+        return responce
+    }   
+
     // COURSE
 
     static async commentCourse(body, token) {
@@ -72,12 +82,13 @@ class PostService {
         console.log(commentCourse)
         return commentCourse
     }
+
     // PROFILE
     static async editProfile(body) {
 
     }
     static async editAva(file, token) {
-        const responce = await fetcher("put", "/api/user-image/update", file, {
+        const responce = await fetcher("put", "/user-image/update", file, {
             headers: {
                 Authorization: token
             }

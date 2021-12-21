@@ -4,16 +4,17 @@ import styled from 'styled-components'
 import Flex from '../../../../../../UI/Flex'
 import UnFound from '../../../../../../UI/UnFound'
 import defaultCourseImage from '../../../../../../media/defultCourseImage.png'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 export default function MyCourses() {
     const data = useSelector(state => state.session.userData.userCreateCourseModels) 
-
+    const history = useHistory()
 
     return (
         <SMyCourses>
             <Header>
                 <Title>Мои курсы</Title>
-                <NewCourseBtn>+</NewCourseBtn>
+                <NewCourseBtn onClick={() => history.push("/profile/create")}>+</NewCourseBtn>
             </Header>
             <List>
                 {   

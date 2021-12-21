@@ -14,22 +14,8 @@ export default function Content() {
     const dispatch = useDispatch()
     const courses = useSelector(state => state.courses.allCourses)
 
-    const [getCourses, loading, error] = useFetching(async () => {
-        dispatch(getCoures())
-    })
-
-    useEffect(() => {
-        getCourses()
-
-        return () => {
-            dispatch(cleanCourses())
-        }
-    }, [])  
-
-
     return (
         <SContent>
-                {loading && <Loader type="large" />}
                 {
                     courses.length ?
                     <ContentHeader>

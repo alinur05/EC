@@ -33,11 +33,9 @@ export default function ProfileBlock() {
                         select image
                     </label></button>
                 </AvaWrapperBlock>
-                <input type="file" id="ava" style={{display: "none"}} value={file} onChange={e => setFile(e.target.files[0])}/>
+                <input type="file" id="ava" style={{display: "none"}} onChange={e => setFile(e.target.files[0])}/>
                 <ChangeAvaBtn onClick={handleEditAva}>
-                    <label htmlFor='ava'>
                         Изменить аватар
-                    </label>
                 </ChangeAvaBtn>
             </AvaBlock>
             <ContentBlock />

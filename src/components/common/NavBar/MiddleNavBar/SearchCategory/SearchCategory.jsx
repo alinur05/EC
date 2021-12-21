@@ -1,14 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Menu, Dropdown } from 'antd';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
-export default function SearchCategory() {
+export default function SearchCategory(){
+    const categories = useSelector(state => state.category.categories) || []
+    const history = useHistory()
 
     const menu = (
         <Menu>
-          <Menu.Item>
-              Item
-          </Menu.Item>
+            {
+                categories.map(item => 
+                    <Clause onClick={() => history.push(`/category/${item.categoryName}`)}>  
+                        {item.categoryName}
+                    </Clause>
+                )
+            }
         </Menu>
       )
 
@@ -20,6 +28,10 @@ export default function SearchCategory() {
         </Dropdown>
     )
 }
+
+const Clause = styled(Menu.Item)`
+
+`
 
 const SSearchCategory = styled.h3`
     margin: 0;
