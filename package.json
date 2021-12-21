@@ -3,6 +3,9 @@
   "homepage": "https://alinur05.github.io/educhange",
   "version": "0.1.0",
   "private": false,
+  "engines": {
+    "node": "12.11.1"
+  },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@testing-library/jest-dom": "^5.16.1",
