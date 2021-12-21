@@ -9,7 +9,7 @@ import { clearCourseDetails, getCourseDetails } from '../../redux/actions/action
 import Flex from '../../UI/Flex'
 import UnFound from '../../UI/UnFound'
 import defaultCourseImage from '../../media/defultCourseImage.png'
-import { CaretRightOutlined, CommentOutlined, LikeOutlined } from '@ant-design/icons'
+import { CaretRightOutlined, CommentOutlined, LikeOutlined, LockOutlined } from '@ant-design/icons'
 import { Collapse } from 'antd';
 import CommentBlock from '../common/PublicComponents/CourseDetails/CommentBlock'
 import RightBar from '../common/PublicComponents/CourseDetails/RightBar'
@@ -95,27 +95,35 @@ export default function CourseDetails() {
                                 course.lessons &&
                                     course.lessons.map((lesson, index) => 
                                         <MyPanel header={`Урок ${index + 1}`} key={index}>
-                                            <LessonContent>
-                                                <VideoPart>
-                                                    <iframe 
-                                                    width="560" 
-                                                    height="315" 
-                                                    src={lesson.lessonUrl}
-                                                    title="YouTube video player" 
-                                                    frameborder="0"
-                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                                    allowfullscreen></iframe>
-                                                </VideoPart>
-                                                <InfoPart>
-                                                    <BlockHeader>
-                                                        <HeaderTitle>Описание урока</HeaderTitle>
-                                                        <HeaderHr></HeaderHr>
-                                                    </BlockHeader>
-                                                    <p>
-                                                        {lesson.lessonInfo}
-                                                    </p>
-                                                </InfoPart>
-                                            </LessonContent>
+                                            {
+                                                lesson.isVisible ?
+                                                    <LessonContent>
+                                                        <VideoPart>
+                                                            <iframe 
+                                                            width="560" 
+                                                            height="315" 
+                                                            src={lesson.lessonUrl}
+                                                            title="YouTube video player" 
+                                                            frameborder="0"
+                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                            allowfullscreen></iframe>
+                                                        </VideoPart>
+                                                        <InfoPart>
+                                                            <BlockHeader>
+                                                                <HeaderTitle>Описание урока</HeaderTitle>
+                                                                <HeaderHr></HeaderHr>
+                                                            </BlockHeader>
+                                                            <p>
+                                                                {lesson.lessonInfo}
+                                                            </p>
+                                                        </InfoPart>
+                                                    </LessonContent>
+                                                :
+                                                <UnVisibleContent>
+                                                    <LockOutlined style={{fontSize: "32px"}} />
+                                                    <WarnText>Урок доступен после покупки..</WarnText>
+                                                </UnVisibleContent>
+                                            }
                                         </MyPanel>
                                     )
                             }
@@ -132,6 +140,17 @@ export default function CourseDetails() {
 
 // CONTENT
 
+const WarnText = styled.h3`
+    margin: 0;
+    color: gray
+`
+const UnVisibleContent = styled(Flex)`
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+    padding: 20px 0px;
+    color: gray
+`
 const VideoPart = styled(Flex)` 
     width: 50%;
 `

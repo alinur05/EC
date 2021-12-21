@@ -1,5 +1,5 @@
 import { SearchOutlined } from '@ant-design/icons'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import styled from 'styled-components'
 import { DARK_BLACK } from '../../../../../media/colors'
@@ -8,12 +8,13 @@ import Flex from '../../../../../UI/Flex'
 
 export default function SearchField() {
     const [query, setQuery] = useState('')
-    const hsitory = useHistory()
+    const history = useHistory()
 
     const onSubmit = e => {
         e.preventDefault()
-        hsitory.push(`/search/${query}`)
+        history.push(`/search/${query}`)
     }
+
 
     return (
         <form onSubmit={onSubmit} >

@@ -19,7 +19,7 @@ export default function SearchQuery() {
         dispatch(searchQuery(query))
 
         return () => dispatch(clearSearchedCourses())
-    }, [])
+    }, [query])
 
     return (
         <ContentWrapper>

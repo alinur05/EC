@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import Flex from '../../../../UI/Flex'
 import defaultCourseImage from '../../../../media/defaultUserAva.png'
 
-export default function CourseCard({data}, props) {
+export default function CourseCard({data, onClick}) {
 
     return (    
-        <Card {...props}>
+        <Card onClick={onClick}>
                                                 <CardTop>
                                                     <CourseImage 
                                                         src={

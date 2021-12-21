@@ -47,13 +47,12 @@ class PostService {
         return splittedCourses
     }
     static async getCourseDetails(id) {
-        const fetchLessons = await axios.get(`${ENDPOINT}/lesson/get-first-three/by-course-id/${id}`)
-
+        const lessons = await fetcher("get", `/lesson/get-all/by-course-id/${id}`)
         const responce = await fetcher("get", `/course/get/by-id/${id}`)
 
         let result = {
             ...responce.value,
-            lessons: fetchLessons.data.value
+            lessons: lessons.value
         }
 
         return result
