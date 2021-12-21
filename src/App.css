@@ -9,3 +9,9 @@
   transition-duration: 0.2s;
   font-weight: 400
 }
+
+.App{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

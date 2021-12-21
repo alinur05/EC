@@ -19,7 +19,7 @@ export default function GetFooter() {
     }
 
     return (
-        <SFooter>
+        <SFooter >
             <Img src={whiteLogo} alt="white logo" onClick={() => history.push("/main")} />
             <Flex align="center">
                 <List>

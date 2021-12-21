@@ -2,7 +2,7 @@
 
 import axios from "axios"
 
-const ENDPOINT = "http://192.168.0.107:8080/api"
+const ENDPOINT = "https://educhange.herokuapp.com/api"
 const ADMIN_TOKEN = "Basic YWRtaW46YWRtaW4="
 
 async function fetcher(method, path, payload, configs) {
@@ -45,6 +45,7 @@ class PostService {
         let splittedCourses = await Promise.all(coursesSplittedByCategories)
         return splittedCourses
     }
+
     static async getCourseDetails(id) {
         const fetchLessons = await axios.get(`${ENDPOINT}/lesson/get-all/by-course-id/${id}`, {
             headers: {
@@ -60,6 +61,22 @@ class PostService {
         }
 
         return result
+    }
+    static async resetPassword(body){
+        let config = {
+            headers: {
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*',
+            }
+        }
+        try{
+            const resp = fetcher('put',`https://educhange.herokuapp.com/api/mail/reset-password`,body,config)
+
+            return resp
+        }catch (e) {
+           throw new Error(e)
+        }
+
     }
     static async editProfile(body) {
 

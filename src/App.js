@@ -22,11 +22,11 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <NavBar />
-        <AppRouter />
-        <GetFooter />
-      </BrowserRouter>
+        <BrowserRouter>
+          <NavBar />
+          <AppRouter />
+          <GetFooter />
+        </BrowserRouter>
     </div>
   )
 }
