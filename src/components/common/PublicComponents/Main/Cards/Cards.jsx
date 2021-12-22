@@ -14,52 +14,56 @@ export default function Cards() {
         <SCards>
             {
             coursesSplittedByCategories.map(course => 
-                course.courses.length &&
-                <CardWrapper key={course.categoryName}>
-                    <CaregoryName>{course.categoryName}</CaregoryName>
-                    <Courses>
-                        {
-                            course.courses.map(course => 
-                                <Card onClick={() => history.push(`/courses/details/${course.courseModel.id}`)}>
-                                    <CardTop>
-                                        <CourseImage 
-                                            src={
-                                                course.imageModel ?
-                                                    course.imageModel.courseImageUrl
-                                                :
-                                                    defaultCourseImage
-                                        }
-                                        />
-                                    </CardTop>
-                                    <CardBody>
-                                        <Flex width="100%" direction="column">
-                                            <CourseName>{course.courseModel.courseName}</CourseName>
-                                            <CourseAuthor>Автор: {course.courseModel.userId}</CourseAuthor>
-                                        </Flex>
-                                        <Flex justify="space-between" width="100%" align="center">
-                                            <Flex gap="15px">
-                                                <Flex align="center" gap="3px">
-                                                    <Likes>{course.likes.length}</Likes>
-                                                    <LikeOutlined style={{Fontsize: "16px"}} />
+                course.courses.length ?
+                    (
+                    <CardWrapper key={course.categoryName}>
+                        <CaregoryName>{course.categoryName}</CaregoryName>
+                        <Courses>
+                            {
+                                course.courses.map(course =>
+                                    <Card onClick={() => history.push(`/courses/details/${course.courseModel.id}`)}>
+                                        <CardTop>
+                                            <CourseImage
+                                                src={
+                                                    course.imageModel ?
+                                                        course.imageModel.courseImageUrl
+                                                        :
+                                                        defaultCourseImage
+                                                }
+                                            />
+                                        </CardTop>
+                                        <CardBody>
+                                            <Flex width="100%" direction="column">
+                                                <CourseName>{course.courseModel.courseName}</CourseName>
+                                                <CourseAuthor>Автор: {course.courseModel.userId}</CourseAuthor>
+                                                {console.log(course)}
+                                            </Flex>
+                                            <Flex justify="space-between" width="100%" align="center">
+                                                <Flex gap="15px">
+                                                    <Flex align="center" gap="3px">
+                                                        <Likes>{course.likes.length}</Likes>
+                                                        <LikeOutlined style={{Fontsize: "16px"}} />
+                                                    </Flex>
+                                                    <Flex align="center" gap="3px">
+                                                        <Comments>{course.comments.length}</Comments>
+                                                        <CommentOutlined style={{Fontsize: "16px"}} />
+                                                    </Flex>
                                                 </Flex>
-                                                <Flex align="center" gap="3px">
-                                                    <Comments>{course.comments.length}</Comments>
-                                                    <CommentOutlined style={{Fontsize: "16px"}} /> 
+                                                <Flex>
+                                                    <Cost align="center">
+                                                        {course.courseModel.price + " "}
+                                                        сом
+                                                    </Cost>
                                                 </Flex>
                                             </Flex>
-                                            <Flex>
-                                                <Cost align="center">
-                                                    {course.courseModel.price + " "}
-                                                    сом
-                                                </Cost>
-                                            </Flex>
-                                        </Flex>
-                                    </CardBody>
-                                </Card>    
-                            )
-                        }
-                    </Courses>
-                </CardWrapper>
+                                        </CardBody>
+                                    </Card>
+                                )
+                            }
+                        </Courses>
+                    </CardWrapper>
+                    ) : ('')
+
             )
             }
         </SCards>

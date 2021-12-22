@@ -50,6 +50,7 @@ const SFooter = styled(Flex)`
     padding: 0px 50px;
     justify-content:space-between;
     background: ${DARK_BLACK}
+    
 `
 const Img = styled.img`
     width: 200px;

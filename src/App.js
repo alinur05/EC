@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import AppRouter from './Router/AppRouter';
 import NavBar from './components/common/NavBar/NavBar';
 import { BrowserRouter } from 'react-router-dom';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { getLocalStorage } from './utiles';
 import { useDispatch } from 'react-redux';
 import { authUser } from './redux/actions/actions';
@@ -23,9 +23,13 @@ function App() {
   return (
     <div className="App" >
         <BrowserRouter>
-          <NavBar />
-          <AppRouter />
+            <div style={{flex: '0 0 auto'}}>
+            <NavBar />
+            </div>
+            <AppRouter />
+          <div style={{flex: '0 0 auto'}}>
           <GetFooter />
+          </div>
         </BrowserRouter>
     </div>
   )
