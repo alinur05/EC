@@ -1,26 +1,27 @@
+import { LoadingOutlined } from '@ant-design/icons'
 import { Spin } from 'antd'
 import React from 'react'
 import styled, { css } from 'styled-components'
+import { DARK_BLACK } from '../media/colors'
 import Flex from './Flex'
 
-export default function Loader(type="medium") {
+export default function Loader({width, height, size, children}) {
     return (
-        <SLoader type>
-            <Spin size={type} />
-        </SLoader>
+        <LoadinerWrapper width={width} height={height}>
+            <SLoader size={size} spin>
+                {children}
+            </SLoader>
+        </LoadinerWrapper>
     )
 }
 
-const SLoader = styled(Flex)`
-    width: 100%;
-    height: 100px;
-    align-items:center;
+const LoadinerWrapper = styled(Flex)`
+    width: ${({width}) => width || "100%"};
+    height: ${({height}) => height || "100px"};
     justify-content:center;
-
-
-    ${props => props.large && css`
-        position: fixed;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-    `} 
+    align-items:center;
+`
+const SLoader = styled(LoadingOutlined)`
+    font-size: ${({size}) => size || "32px"};
+    color: ${DARK_BLACK}
 `

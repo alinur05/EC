@@ -3,7 +3,7 @@
 
 import axios from "axios"
 
-const ENDPOINT = "https://educhange.herokuapp.com/api"
+const ENDPOINT = "http://192.168.0.107:8080/api"
 const ADMIN_TOKEN = "Basic YWRtaW46YWRtaW4="
 
 async function fetcher(method, path, payload, configs) {
@@ -16,9 +16,12 @@ class PostService {
     // AUTHENTICATION
 
     static async sign_up(body) {
-        const responce = await fetcher("post", "/user/sign-up", body)
-        console.log(responce)
-        return responce
+        try {
+            const responce = await fetcher("post", "/user/sign-up", body)
+            return responce
+        }catch(e) {
+            console.log("ERROR: ", e)
+        }
     }
     static async sign_in(body) {
         const responce = await fetcher("post", "/user/sign-in", body)
@@ -71,6 +74,26 @@ class PostService {
 
     // COURSE
 
+    static async setCourseImage(courseId, file, token) {
+        const responce = await fetcher("post", `/course-image/create/${courseId}`, file, {
+            headers: {
+                Authorization: token
+            }
+        })
+        console.log(responce)
+        return responce
+    }
+
+    static async createCourse(body, token) {
+        const responce = await fetcher("post", "/course/create", body, {
+            headers: {
+                Authorization: token
+            }
+        })
+
+        return responce
+    }
+
     static async commentCourse(body, token) {
         console.log(token)
         const commentCourse = await fetcher("post", "/comment/create", body, {
@@ -82,7 +105,37 @@ class PostService {
         return commentCourse
     }
 
+    // BALANCE
+
+    static async getBalance(userId, token) {
+        const responce = await fetcher("get", `/balance/get-by-user-id/${userId}`, null, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return responce
+    }
+
     // PROFILE
+
+    static async getProfile(id, token) {
+        const userModelToSend = await (await fetch(`/user/get-by-id/${id}`, {
+            method: "GET",
+            headers: {
+                Authorization: token
+            }
+        })).json()
+
+        const userBalanceModel = await this.getBalance(id, token)
+
+        const result = {
+            userModelToSend: userModelToSend,
+            userBalanceModel: userBalanceModel.value
+        }
+
+        console.log(result)
+        return result   
+    }
     static async editProfile(body) {
 
     }
@@ -94,6 +147,17 @@ class PostService {
         })
         return responce
     }
+
+    // PURCHASE
+
+    static async purchaseCourse(courseId, token) {
+        const responce = await fetcher("post", `/purchase/create-by-course-id/${courseId}`, null, {
+            headers: {
+                Authorization: token
+            }
+        })
+        return responce
+    }    
 }
 
 export default PostService

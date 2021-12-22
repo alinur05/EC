@@ -12,6 +12,7 @@ import { getLocalStorage } from '../../../../../utiles'
 import useFetching from '../../../../../hooks/useFetching'
 import ErrorQuery from '../../../../../UI/ErrorQuery'
 import Loader from '../../../../../UI/Loader'
+import { Input } from 'antd'
 
 export default function SignInModal(props) {
     const {
@@ -92,7 +93,7 @@ export default function SignInModal(props) {
                 </ModalHeader>
                 <ModalBody>
                         <Field type="text" placeholder="Логин" value={fields.username} onChange={e => setFields({...fields, username: e.target.value})} />
-                        <Field type="password" placeholder="Пароль" value={fields.password} onChange={e => setFields({...fields, password: e.target.value})} />
+                        <PasswordField type="password" placeholder="Пароль" value={fields.password} onChange={e => setFields({...fields, password: e.target.value})} />
                 </ModalBody>
                 <ModalFooter>
                     <SignUpBtn style={{fontSize: "16px", padding: "9px 50px"}} onClick={handleSignIn}>Войти</SignUpBtn>
@@ -145,7 +146,7 @@ const ModalBody = styled(Flex)`
     align-items:center;
     gap: 20px;
 `
-const Field = styled.input`
+const Field = styled(Input)`
     width: 300px;
     padding: 10px 15px;
     outline: none;
@@ -153,6 +154,32 @@ const Field = styled.input`
     border-radius: 5px;
     font-size: 14px;
     border: 1px solid #DAE2F2;
+    &:hover {
+        border: 1px solid #DAE2F2;
+    }
+    &:focus {
+        outline: none;
+        box-shadow: none;
+        border: 1px solid #DAE2F2;
+    }
+`
+const PasswordField = styled(Input.Password)`
+    width: 300px;
+    padding: 10px 15px;
+    color: #676E8B;
+    border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid #DAE2F2;
+    &:hover {
+        border: 1px solid #DAE2F2 !important;
+        outline: none;
+    }
+    &:focus {
+        outline: none !important;
+        box-shadow: none !important;
+        border:none !important;
+        outline: none !important;
+    }
 `
 const ModalFooter = styled(Flex)`
     width: 100%;

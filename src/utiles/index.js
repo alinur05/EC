@@ -41,3 +41,7 @@ export const lessonUrlEditor = (url) => {
         result = url
     return result
 }
+
+// COURSE CREATE
+
+export const isGoodUrl = (url) => (url.includes("https://www.youtube.com/"))
