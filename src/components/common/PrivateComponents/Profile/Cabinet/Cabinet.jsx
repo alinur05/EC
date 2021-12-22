@@ -17,4 +17,5 @@ export default function Cabinet() {
 const SCabinet = styled(Flex)`
     width: 100%;
     justify-content:space-between;
+    flex: 1 0 auto;
 `

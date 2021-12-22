@@ -25,6 +25,8 @@ const BoughtCoursesDetails = () => {
     })
     const course = useSelector(state => state.courses.course)
 
+
+
     useEffect(() => {
         fetchData(id)
 
@@ -82,12 +84,15 @@ const BoughtCoursesDetails = () => {
                     </VideoPart>
                 </LeftContent>
                 <RightContent>
-                    <MyHeader>1 урок</MyHeader>
-                    { course.lessons && course.lessons.map((lesson,index)=>{
-                        return <div key={index}>{index+1} урок</div>
-                    })
+                    <MyHeader><p style={{fontSize: '20px'}}>{course.lessons?.length} уроков</p></MyHeader>
+                    <Lessons>
+                        { course.lessons && course.lessons.map((lesson,index)=>{
+                            return <div key={index}>{index+1} урок</div>
+                        })
 
-                    }
+                        }
+                    </Lessons>
+
                 </RightContent>
                 {/*<LeftContent>*/}
                 {/*    <InfoBlock>*/}
@@ -163,11 +168,17 @@ const LeftContent = styled(Flex)`
    border: 2px solid ${DARK_BLACK}
 `
 const RightContent = styled(Flex)`
-    align-items:center;
+    padding: 10px;
+    align-items:start;
     flex-direction:column;
     width: 30%;
     border: 2px solid ${DARK_BLACK}
     
+`
+const Lessons = styled(Flex)`
+    flex-direction: column;
+    overflow: auto;
+
 `
 const VideoPart = styled(Flex)` 
     width: 100%;
