@@ -37,8 +37,14 @@ export default function Create() {
 
 
     const handleNextStep = () => {
+        let body = {...fields}
+            console.log(body)
+            if(body.email === "") delete body.email
+            if(body.phoneNumber === "") delete body.phoneNumber
+            console.log(body)
+            
         if(fields.categoryId) {
-            dispatch(createCourse(fields))
+            dispatch(createCourse(body))
         }else {
             const body = {
                 ...fields,

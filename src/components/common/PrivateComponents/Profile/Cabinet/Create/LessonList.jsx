@@ -11,17 +11,18 @@ import {
 import { RED } from '../../../../../../media/colors'
 import { useDispatch } from 'react-redux'
 import { removeLesson } from '../../../../../../redux/actions/actions'
+import { useHistory } from 'react-router-dom'
 
 export default function LessonList({data}) {
     const dispatch = useDispatch()
-
+    const history = useHistory()
 
     return (
         <SLessonList>
             {
                 data.map((lesson, index) => 
                 <Card
-                    key={index}
+                    key={lesson.id}
                     timeout={500}
                     classNames="item"
                 >

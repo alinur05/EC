@@ -59,7 +59,7 @@ class PostService {
             ...responce.value,
             lessons: lessons.value
         }
-
+        console.log(result)
         return result
     }
 

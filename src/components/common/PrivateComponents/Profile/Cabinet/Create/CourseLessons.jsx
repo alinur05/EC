@@ -20,6 +20,8 @@ export default function CourseLessons({onClick}) {
     const loading = useSelector(state => state.create.loading)
     const error = useSelector(state => state.create.error)
     
+    let [isForFree, setIsForFree] = useState(false)
+
     const [lesson, setLesson] = useState({
         "courseId": data.courseModel.id,
         "isVisible": false,
@@ -29,13 +31,14 @@ export default function CourseLessons({onClick}) {
 
     const handleAddLesson = () => {
         if(lesson.lessonInfo && lesson.lessonUrl) {
-            dispatch(addLesson(lesson))
+            dispatch(addLesson({...lesson, isVisible: isForFree}))
             setLesson({
                 "courseId": data.courseModel.id,
                 "isVisible": false,
                 "lessonInfo": "",
                 "lessonUrl": ""
             })
+            dispatch(setCreateErr(""))
         }else {
             dispatch(setCreateErr("Заполните все поля"))
         }
@@ -82,7 +85,7 @@ export default function CourseLessons({onClick}) {
                             />   
                             <Flex align="center" gap="10px">
                                 <Checkbox 
-                                    onChange={e => setLesson({...lesson, isVisible: e.target.checked})}
+                                    onChange={e => setIsForFree(e.target.checked)}
                                 >Показывать бесплатно
                                 </Checkbox>
                             </Flex>

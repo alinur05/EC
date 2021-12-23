@@ -34,7 +34,7 @@ export default function Cards() {
                                     <CardBody>
                                         <Flex width="100%" direction="column">
                                             <CourseName>{course.courseModel.courseName}</CourseName>
-                                            <CourseAuthor>Автор: {course.courseModel.username}</CourseAuthor>
+                                            <CourseAuthor>Автор: {course.authorFullName}</CourseAuthor>
                                         </Flex>
                                         <Flex justify="space-between" width="100%" align="center">
                                             <Flex gap="15px">

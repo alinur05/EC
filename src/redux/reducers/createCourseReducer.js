@@ -11,14 +11,13 @@ const initialState = {
 const createCourseReducer = (state = initialState, action) => {
     switch(action.type) {
         case CREATE_NEW_COURSE:
-            console.log(action.payload)
             return {...state, data: action.payload}
         case SET_CREATE_ERROR:
             return {...state, error: action.payload}
         case NEXT_STEP:
             return {...state, step: state.step + 1}
         case STEP_RESET:
-            return {...state, step: 1, error: '', data: {}, loading: false, lessons: []}
+            return {...state, step: 1, error: '', data: {}, loading: false, lessons: [], data: {}}
         case TOGGLE_CREATE_LOADING:
             return {...state, loading: !state.loading}
         case ADD_LESSON:

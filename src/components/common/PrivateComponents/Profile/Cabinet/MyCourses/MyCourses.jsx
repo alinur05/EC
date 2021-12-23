@@ -25,7 +25,7 @@ export default function MyCourses() {
                 {   
                     data.length ?
                     data.map(item => 
-                        <Clause>    
+                        <Clause onClick={() => history.push(`/profile/mycourses/${item.courseModel.id}`)}>    
                             <ClauseImage>
                                 <Image 
                                     src={item.imageModel ? item.imageModel.imageUrl : defaultCourseImage}
@@ -34,7 +34,6 @@ export default function MyCourses() {
                             <ClauseBody>
                                 <CourseName>{item.courseModel.courseName}</CourseName>
                                 <Cost>{item.courseModel.price} сом</Cost>
-                                <Button onClick={() => dispatch(removeCourse(item.courseModel.id))}><DeleteOutlined /></Button>
                             </ClauseBody>
                         </Clause>    
                     )

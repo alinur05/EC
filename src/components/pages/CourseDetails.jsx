@@ -13,6 +13,7 @@ import { CaretRightOutlined, CommentOutlined, LikeOutlined, LockOutlined } from 
 import { Collapse } from 'antd';
 import CommentBlock from '../common/PublicComponents/CourseDetails/CommentBlock'
 import RightBar from '../common/PublicComponents/CourseDetails/RightBar'
+import {isGoodUrl} from '../../utiles/index'
 
 const { Panel } = Collapse;
 
@@ -47,7 +48,7 @@ export default function CourseDetails() {
                                 <Author>Уроков: {course.lessonCount && course.lessonCount}</Author>
                             </Flex>
                             <Flex gap="10px" color="#fff" align="center">
-                                <Author>Автор: {course.courseModel && course.courseModel.userId}</Author>
+                                <Author>Автор: {course.authorFullName}</Author>
                             </Flex>
                             <Flex gap="10px">
                                 <Flex gap="5px" align="center">
@@ -93,16 +94,20 @@ export default function CourseDetails() {
                                             {
                                                 lesson.isVisible ?
                                                     <LessonContent>
-                                                        <VideoPart>
-                                                            <iframe 
-                                                            width="560" 
-                                                            height="315" 
-                                                            src={lesson.lessonUrl}
-                                                            title="YouTube video player" 
-                                                            frameborder="0"
-                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                                            allowfullscreen></iframe>
-                                                        </VideoPart>
+                                                            {
+                                                                isGoodUrl(lesson.lessonUrl) &&
+                                                                <VideoPart>
+                                                                    <iframe 
+                                                                    width="560" 
+                                                                    height="315" 
+                                                                    src={lesson.lessonUrl}
+                                                                    title="YouTube video player" 
+                                                                    frameborder="0"
+                                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                                                    allowfullscreen></iframe>
+                                                                
+                                                                </VideoPart>
+                                                            }
                                                         <InfoPart>
                                                             <BlockHeader>
                                                                 <HeaderTitle>Описание урока</HeaderTitle>

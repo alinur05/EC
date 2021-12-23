@@ -7,6 +7,7 @@ import ProfileBlock from '../common/PrivateComponents/Profile/ProfileBlock/Profi
 import { useDispatch } from 'react-redux'
 import { getProfile } from '../../redux/actions/actions'
 import { getLocalStorage } from '../../utiles'
+import Title from '../../UI/Title'
 
 export default function Profile() {
     const dispatch = useDispatch()
@@ -17,7 +18,7 @@ export default function Profile() {
     
     return (
         <ContentWrapper>
-            <h1>Профиль</h1>
+            <Title>Профиль</Title>
             <Main>
                 <ProfileBlock />
                 <Cabinet />

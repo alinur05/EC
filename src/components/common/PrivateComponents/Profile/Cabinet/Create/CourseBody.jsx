@@ -15,7 +15,6 @@ export default function CourseBody({onClick, fields, setFields}) {
         setFields({...fields, [e.target.name]: e.target.value})
     }
 
-
     return (
                 <SCourseBody>
                     <MyInput 
