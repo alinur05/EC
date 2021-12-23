@@ -78,3 +78,14 @@ export const handleShortTitle = text => {
     result += "..."
     return result
 }
+
+export const getUsername = email => {
+    let ind = null
+    for(let i = 0; i < email.length; i++) {
+        if(email[i] === "@") {
+            ind = i
+        }
+    }
+
+    return email.slice(0, ind)
+}

@@ -4,7 +4,7 @@ import styled, {css} from 'styled-components'
 import Flex from '../../../../../UI/Flex'
 import googleIcon from '../../../../../media/googleIcon.svg'
 import { DARK_BLACK } from '../../../../../media/colors'
-import { getLocalStorage, signupFieldsValidator } from '../../../../../utiles'
+import { getLocalStorage, getUsername, signupFieldsValidator } from '../../../../../utiles'
 import PostService from '../../../../../API/API'
 import { auth, firebase } from '../../../../../firebase'
 import {signUpUser, setAuthError, clearAuthErrors} from '../../../../../redux/actions/actions'
@@ -36,12 +36,13 @@ export default function SignUpModal(props) {
     const handleGoogleSignUp = async () => {
         const provider = new firebase.auth.GoogleAuthProvider()
         const {user} = await auth.signInWithPopup(provider)
-
+        console.log(user)
+        
         const body = {
             fullName: user.displayName,
             email: user.email,
             password: user.uid,
-            username: user.displayName.split(' ').join('')
+            username: getUsername(user.email)
         }
         
         dispatch(signUpUser(body))
