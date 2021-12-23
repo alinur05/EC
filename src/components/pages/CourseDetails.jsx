@@ -20,13 +20,12 @@ export default function CourseDetails() {
     const {id} = useParams()
     const dispatch = useDispatch()
     const course = useSelector(state => state.courses.course)
-
-    const [fetchData, loading, error] = useFetching(async id => {
-        dispatch(getCourseDetails(id))
-    })
+    const loading = useSelector(state => state.courses.loading)
+    const error = useSelector(state => state.courses.error)
 
     useEffect(() => {
-        fetchData(id) 
+        dispatch(getCourseDetails(id))
+        window.scrollTo(0, 0)
 
         return () => {
             dispatch(clearCourseDetails())
@@ -60,10 +59,6 @@ export default function CourseDetails() {
                                     <CommentOutlined style={{fontSize: "16px", color: '#fff'}} />
                                 </Flex>
                             </Flex>
-                        </Flex>
-                        <Flex direction="column" align="flex-end">
-                            <Price>{course.courseModel && course.courseModel.price} сом</Price>
-                            <ButBtn>Купить</ButBtn>
                         </Flex>
                     </Flex>
                 </LeftSide>
@@ -223,7 +218,7 @@ const IntroSection = styled(Flex)`
     background: ${DARK_BLACK};
 `
 const LeftSide = styled(Flex)`
-    width: 80%;
+    width: 65%;
     height: 100%;
     padding: 50px;
     flex-direction:column;
@@ -264,7 +259,7 @@ const Price = styled.h3`
     color: #fff;
 `
 const RightSide = styled(Flex)`
-    width: 20%;
+    width: 35%;
     height: 100%;
     align-items:center;
 `

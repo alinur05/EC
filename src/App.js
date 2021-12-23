@@ -38,3 +38,10 @@ function App() {
 }
 
 export default App;
+
+
+// Todo
+
+// Loading 
+// Slider
+// Course edition

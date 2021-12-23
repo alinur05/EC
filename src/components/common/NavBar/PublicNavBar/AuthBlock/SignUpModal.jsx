@@ -11,9 +11,10 @@ import {signUpUser, setAuthError, clearAuthErrors} from '../../../../../redux/ac
 import { useDispatch, useSelector } from 'react-redux'
 import ErrorQuery from '../../../../../UI/ErrorQuery'
 import useFetching from '../../../../../hooks/useFetching'
+import Loader from '../../../../../UI/Loader'
 
 export default function SignUpModal(props) {
-
+    
     const { 
         setSigninModalVisible,
         setSignupModalVisible,
@@ -22,11 +23,7 @@ export default function SignUpModal(props) {
 
     const dispatch = useDispatch()
     const {signup} = useSelector(state => state.session.error)
-
-    const [signUp, loading, fetchError] = useFetching(async body => {
-        dispatch(signUpUser(body))
-        fetchError && dispatch(setAuthError("signup", fetchError))
-    })
+    const loading = useSelector(state => state.session.loading)
 
     const [fields, setFields] = useState({
         fullName: "",
@@ -47,7 +44,7 @@ export default function SignUpModal(props) {
             username: user.displayName.split(' ').join('')
         }
         
-        signUp(body)
+        dispatch(signUpUser(body))
         const session = getLocalStorage("session")
         if(session) {
             handleModalCancel()
@@ -61,7 +58,7 @@ export default function SignUpModal(props) {
             let body = {...fields}
             delete body.repeat_password
 
-            signUp(body)
+            dispatch(signUpUser(body))
 
             const session = getLocalStorage("session")
             if(session) {
@@ -119,7 +116,12 @@ export default function SignUpModal(props) {
                     </Flex>
                 </ModalBody>
                 <ModalFooter>
-                    <SignUpBtn style={{fontSize: "16px", padding: "9px 50px"}} onClick={handleSignUp}>Регистрация</SignUpBtn>
+                    {
+                        loading ?
+                            <Loader height="auto" />
+                        :
+                            <SignUpBtn style={{fontSize: "16px", padding: "9px 50px"}} onClick={handleSignUp}>Регистрация</SignUpBtn>
+                    }
                     <ErrorQuery error={signup}/>
                 </ModalFooter>
                 <SigninPropmt onClick={handleAlreadyHasAccount}>Уже есть аккаунт? Войти</SigninPropmt>

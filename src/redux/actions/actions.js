@@ -1,6 +1,6 @@
 import PostService from '../../API/API'
-import { getLocalStorage, removeLocalStorage, setLocalStorage } from '../../utiles'
-import { GET_PROFILE, PURCHASE_COURSE, STEP_RESET, SET_CREATE_ERROR, SET_COURSE_IMAGE, CREATE_NEW_COURSE, GET_COURSES_BY_QUERY, CLEAN_UP_SEARCHED_COURSES, CLEAN_UP_CATEGORY_COURSES, GET_COURSE_BY_CATEGORY, COMMENT_COURSE, EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS, NEXT_STEP, TOGGLE_CREATE_LOADING} from '../types'
+import { getCategoriesCapitaled, getLocalStorage, removeLocalStorage, setLocalStorage } from '../../utiles'
+import { REMOVE_LESSON, REMOVE_COURSE, CREATE_LESSONS, ADD_LESSON, GET_PROFILE, PURCHASE_COURSE, STEP_RESET, SET_CREATE_ERROR, SET_COURSE_IMAGE, CREATE_NEW_COURSE, GET_COURSES_BY_QUERY, CLEAN_UP_SEARCHED_COURSES, CLEAN_UP_CATEGORY_COURSES, GET_COURSE_BY_CATEGORY, COMMENT_COURSE, EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS, NEXT_STEP, TOGGLE_CREATE_LOADING, TOGGLE_SEARCH_LOADING, SET_SEARCH_ERROR, TOGGLE_SESSION_LOADING} from '../types'
 
 // SESSION
 
@@ -9,6 +9,7 @@ export const setAuthError = (authKey, value) => ({type: SET_AUTH_ERROR, payload:
 export const clearAuthErrors = () => ({type: CLEAR_AUTH_ERRORS})
 
 export const signUpUser = body => async dispatch => {
+    dispatch(toggleSessionLoading())
     const responce = await PostService.sign_up(body)
 
     if(responce.status === "FAIL") {
@@ -18,10 +19,12 @@ export const signUpUser = body => async dispatch => {
         dispatch({type: AUTH_USER, payload: responce.value})
         dispatch(clearAuthErrors())
     }
-
+    dispatch(toggleSessionLoading())
 }
 
+export const toggleSessionLoading = () => ({type: TOGGLE_SESSION_LOADING})
 export const authUser = body => async dispatch => {
+    dispatch(toggleSessionLoading())
     const responce = await PostService.sign_in(body)
 
     if(responce.status === "FAIL") {
@@ -32,6 +35,7 @@ export const authUser = body => async dispatch => {
         dispatch({type: AUTH_USER, payload: responce.value})
         dispatch(clearAuthErrors())
     }
+    dispatch(toggleSessionLoading())
 }
 
 export const logoutUser = () => {
@@ -43,19 +47,24 @@ export const logoutUser = () => {
 // COURSES
 
 export const getCoures = (token) => async dispatch => {
-    const responce = await PostService.getAllCourses()
-    const {allCourses, categories} = responce
-    const splittedByCategories = await PostService.getCoursesByCategoryId(categories.value, token)
+    dispatch(toggleSearchLoading())
+        const responce = await PostService.getAllCourses()
+        const {allCourses, categories} = responce
+        
+        const capitalledCategories = getCategoriesCapitaled(categories.value)
 
-    if(allCourses.status === "FAIL" ) {
-        throw new Error(allCourses.details)
-    }else if(categories.status === "FAIL") {
-        throw new Error(categories.details)
-    }
+        const splittedByCategories = await PostService.getCoursesByCategoryId(capitalledCategories, token)
 
-    dispatch({type: GET_ALL_COURSES, payload: allCourses.value})
-    dispatch({type: GET_CATEGORIES, payload: categories.value})
-    dispatch({type: SPLIT_BY_CATEGIRES, payload: splittedByCategories})
+        if(allCourses.status === "FAIL" ) {
+            throw new Error(allCourses.details)
+        }else if(categories.status === "FAIL") {
+            throw new Error(categories.details)
+        }
+
+        dispatch({type: GET_ALL_COURSES, payload: allCourses.value})
+        dispatch({type: GET_CATEGORIES, payload: capitalledCategories})
+        dispatch({type: SPLIT_BY_CATEGIRES, payload: splittedByCategories})
+    dispatch(toggleSearchLoading())
 }
 
 
@@ -70,19 +79,25 @@ export const getCourseDetails = id => async dispatch => {
 }
 
 export const getCourseByCategory = name => async dispatch => {
-    const responce = await PostService.getCourseByCategory(name) 
-    dispatch({type: GET_COURSE_BY_CATEGORY, payload: responce.value})
+    dispatch(toggleSearchLoading())
+        const responce = await PostService.getCourseByCategory(name) 
+        dispatch({type: GET_COURSE_BY_CATEGORY, payload: responce.value})
+    dispatch(toggleSearchLoading())
 }
 
 export const searchQuery = query => async dispatch => {
-    dispatch(clearSearchedCourses())
+    dispatch(toggleSearchLoading())
     const responce = await PostService.getCourseByQuery(query)
     if(responce.status === "FAIL") {
-        throw new Error(responce.details)
+        dispatch(setSearchError(responce.details))
     }else {
         dispatch({type: GET_COURSES_BY_QUERY, payload: responce.value})
+        dispatch(toggleSearchLoading())
     }
 }
+
+export const toggleSearchLoading = () => ({type: TOGGLE_SEARCH_LOADING})
+export const setSearchError = () => ({type: SET_SEARCH_ERROR})
 
 // COURSE
 
@@ -93,6 +108,12 @@ export const commentCourse = (body, token) => async dispatch => {
 export const setCourseImage = (courseId, file, token) => async dispatch => {
     const responce = await PostService.setCourseImage(courseId, file, token)
     dispatch({type: SET_COURSE_IMAGE, payload: responce.value})
+}
+
+export const removeCourse = courseId => async dispatch => {
+    const responce = await PostService.removeCourse(courseId)
+    console.log(responce)
+    dispatch({type: REMOVE_COURSE, payload: responce.value.id})
 }
 
 // PROFILE
@@ -123,7 +144,7 @@ export const setCreateErr = err => ({type: SET_CREATE_ERROR, payload:err})
 export const nextStep = () => ({type: NEXT_STEP})
 export const resetSteps = () => ({type: STEP_RESET})
 export const toggleCreateCourseLoading = () => ({type: TOGGLE_CREATE_LOADING})
-
+export const addLesson = lesson => ({type: ADD_LESSON, payload: lesson})
 
 export const createCourse = (body) => async dispatch => {
     dispatch(toggleCreateCourseLoading())
@@ -140,23 +161,21 @@ export const createCourse = (body) => async dispatch => {
     dispatch(toggleCreateCourseLoading())
 }
 
-export const createLessonCourse = (lessons, courseId, token) => async dispatch => {
+export const createLessons = lessons => async dispatch => {
     dispatch(toggleCreateCourseLoading())
-
-        let responce = null
-        if(Array.isArray(lessons)) {
-            responce = await PostService.createLessons(lessons, courseId, token)
-        }else {
-            responce = await PostService.createLesson(lessons, courseId, token)
-        }
-
-        console.log(responce)
+        const responce = await PostService.createLessons(lessons)
+        dispatch(nextStep())
     dispatch(toggleCreateCourseLoading())
 }
-export const finishCreateCourse = () => async dispatch => {
-
+export const finishCreateCourse = (formData, courseId) => async dispatch => {
+    if(formData) {
+        const responce = await PostService.setCourseImage(courseId, formData)
+        dispatch({type: SET_COURSE_IMAGE, payload: responce.value})
+    }
     dispatch(resetSteps())
 }
+
+export const removeLesson = id => ({type: REMOVE_LESSON, payload: id})
 
 // PURCHASE
 
@@ -170,3 +189,4 @@ export const purchaseCourse = (courseId, token) => async dispatch => {
     }
 
 }
+

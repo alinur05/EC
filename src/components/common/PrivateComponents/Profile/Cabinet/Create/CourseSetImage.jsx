@@ -12,13 +12,14 @@ export default function CourseSetImage() {
     const data = useSelector(state => state.create.data)
 
     const handleFinishCreateCourse = () => {
-        console.log(data)
-        dispatch(finishCreateCourse(file, data.token))
+        const formData = new FormData()
+        formData.append("file", file)
+        dispatch(finishCreateCourse(formData, data.courseModel.id))
     }
     
     return (
         <SCourseSetImage>
-            <input type="file" style={{display: "none"}} id="courseImage" onChange={e => setFile(e.target.files[0])}/>
+            <input type="file" id="courseImage" onChange={e => setFile(e.target.files[0])}/>
             <Button onClick={handleFinishCreateCourse}>Finish</Button>
         </SCourseSetImage>
     )

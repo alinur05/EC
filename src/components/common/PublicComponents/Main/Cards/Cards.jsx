@@ -81,7 +81,7 @@ const CaregoryName = styled.h3`
     font-size: 36px;
 `
 const Card = styled(Flex)`
-    width: 250px;
+    width:250px;
     height: 250px;
     border-radius: 5px;
     box-shadow: 0 0 30px #e3e3e3;

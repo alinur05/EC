@@ -12,12 +12,16 @@ import defaultCourseImage from '../../media/defaultUserAva.png'
 import Title from '../../UI/Title'
 import UnFound from '../../UI/UnFound'
 import CourseCard from '../common/PublicComponents/Search/CourseCard'
+import Loader from '../../UI/Loader'
+import Error from '../../UI/Error'
 
 export default function SearchCategory() {
     const {categoryName} = useParams()
     const dispatch = useDispatch()
     const courses = useSelector(state => state.courses.categoryCourses) || []
     const history = useHistory()
+    const loading = useSelector(state => state.courses.loading)
+    const error = useSelector(state => state.courses.error)
 
     useEffect(() => {
         dispatch(getCourseByCategory(categoryName))
@@ -27,21 +31,29 @@ export default function SearchCategory() {
 
     return (
         <ContentWrapper>
-                    {
-                        courses.length ?
-                            <>
-                                <Title>Курсы по теме {categoryName}</Title>
-                                    <Courses>
-                                        {
-                                        courses.map(course => 
-                                            <CourseCard data={course} onClick={() => history.push(`/courses/details/${course.courseModel.id}`)} />
-                                            )}
-                                    </Courses>  
-                            </>
+            {
+                loading ?
+                    <Loader size="64px" />
+                    :
+                
+                    error ?
+                        <Error text={error} />
+                    :   
 
-                        :
+                    courses.length ?
+                        <>
+                            <Title>Курсы по теме {categoryName}</Title>
+                            <Courses>
+                                {
+                                    courses.map(course => 
+                                        <CourseCard data={course} onClick={() => history.push(`/courses/details/${course.courseModel.id}`)} />
+                                    )
+                                }
+                            </Courses>
+                        </>
+                    :
                         <UnFound text={`К сожелению по теме ${categoryName} нечего не найдено..`} />
-                    }
+            }
         </ContentWrapper>
     )
 }

@@ -13,21 +13,28 @@ import UnFound from '../../../../UI/UnFound'
 export default function Content() {
     const dispatch = useDispatch()
     const courses = useSelector(state => state.courses.allCourses)
+    const loading = useSelector(state => state.courses.loading)
+    const error = useSelector(state => state.courses.error)
 
     return (
         <SContent>
-                {
-                    courses.length ?
-                    <ContentHeader>
-                        <Title>Курсы</Title>
-                        <P>Выбирайте из {courses.length} онлайн-видеокурсов;</P>
-                    </ContentHeader>
+            {
+                loading ?
+                    <Loader size="64px" />
+                :
+                    error ?
+                        <Error text={error} />
                     :
-                    <UnFound 
-                        text="Пока нет курсов.."
-                    />
-                }
-
+                        courses.length ?
+                            <ContentHeader>
+                                <Title>Курсы</Title>
+                                <P>Выбирайте из {courses.length} онлайн-видеокурсов;</P>
+                            </ContentHeader>
+                        :
+                            <UnFound 
+                                text="Пока нет курсов.."
+                            />
+            }
             <CoursesContent>
                 <Cards />
             </CoursesContent>

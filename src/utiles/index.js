@@ -45,3 +45,36 @@ export const lessonUrlEditor = (url) => {
 // COURSE CREATE
 
 export const isGoodUrl = (url) => (url.includes("https://www.youtube.com/"))
+
+// CATEGORIES
+
+export const getCategoriesCapitaled = categories => {
+    const result = categories.map(item => {
+        if(item.categoryName === "it") {
+            let maped = {
+                ...item,
+                categoryName: item.categoryName.toUpperCase()
+            }
+            return maped
+        }
+
+        let capitalled = item.categoryName.split('')
+        let upped = capitalled[0].toUpperCase()
+        capitalled.splice(0, 1, upped)
+        let maped = {
+            ...item,
+            categoryName: capitalled.join('')
+        }
+        return maped
+    })
+    return result
+}
+
+
+export const handleShortTitle = text => {
+    if(text.length < 75) return text
+
+    let result = text.slice(0, 90)
+    result += "..."
+    return result
+}

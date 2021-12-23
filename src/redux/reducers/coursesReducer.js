@@ -1,11 +1,13 @@
-import { GET_COURSES_BY_QUERY, CLEAN_UP_CATEGORY_COURSES, CLEAN_UP_SEARCHED_COURSES, GET_COURSE_BY_CATEGORY, CLEAN_UP_ALL_COURSES, CLEAN_UP_DETAILS, COMMENT_COURSE, GET_ALL_COURSES, GET_COURSE_DETAILS, SPLIT_BY_CATEGIRES } from "../types"
+import { SET_SEARCH_ERROR, TOGGLE_SEARCH_LOADING, GET_COURSES_BY_QUERY, CLEAN_UP_CATEGORY_COURSES, CLEAN_UP_SEARCHED_COURSES, GET_COURSE_BY_CATEGORY, CLEAN_UP_ALL_COURSES, CLEAN_UP_DETAILS, COMMENT_COURSE, GET_ALL_COURSES, GET_COURSE_DETAILS, SPLIT_BY_CATEGIRES } from "../types"
 
 const initialState = {
     allCourses: [],
     course: {},
     categoryCourses: [],
     searchedCourses: [],
-    coursesSplittedByCategories: []
+    coursesSplittedByCategories: [],
+    loading: false,
+    error: ""
 }
 
 const coursesReducer = (state = initialState, action) => {
@@ -30,6 +32,10 @@ const coursesReducer = (state = initialState, action) => {
             return {...state, categoryCourses: []}
         case GET_COURSES_BY_QUERY:
             return {...state, searchedCourses: action.payload}
+        case TOGGLE_SEARCH_LOADING:
+            return {...state, loading: !state.loading}
+        case SET_SEARCH_ERROR:
+            return {...state, error: action.payload}
         default:    
             return state
     }

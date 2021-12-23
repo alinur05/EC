@@ -4,7 +4,9 @@ import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min
 import styled from 'styled-components'
 import { clearSearchedCourses, searchQuery } from '../../redux/actions/actions'
 import ContentWrapper from '../../UI/ContentWrapper'
+import Error from '../../UI/Error'
 import Flex from '../../UI/Flex'
+import Loader from '../../UI/Loader'
 import Title from '../../UI/Title'
 import UnFound from '../../UI/UnFound'
 import CourseCard from '../common/PublicComponents/Search/CourseCard'
@@ -14,6 +16,8 @@ export default function SearchQuery() {
     const searchedCourses = useSelector(state => state.courses.searchedCourses)
     const history = useHistory()
     const dispatch = useDispatch()
+    const loading = useSelector(state => state.courses.loading)
+    const error = useSelector(state => state.courses.error)
 
     useEffect(() => {
         dispatch(searchQuery(query))
@@ -24,20 +28,27 @@ export default function SearchQuery() {
     return (
         <ContentWrapper>
             {
-                searchedCourses.length ?
-                    <>
-                        <Title>Результаты по запросу {query}</Title>
-                        <Courses>
-                            {
-                                searchedCourses.map(course => 
-                                    <CourseCard data={course} onClick={() => history.push(`/courses/details/${course.courseModel.id}`)} />
-                                )
-                            }
-                        </Courses>
-                    </>
+                loading ?
+                    <Loader size="64px" />
                 :
-                <UnFound text={`К сожелению по запросу ${query} нечего не найдено..`} />
+                
+                    error ?
+                        <Error text={error} />
+                    :   
 
+                    searchedCourses.length ?
+                        <>
+                            <Title>Результаты по запросу {query}</Title>
+                            <Courses>
+                                {
+                                    searchedCourses.map(course => 
+                                        <CourseCard data={course} onClick={() => history.push(`/courses/details/${course.courseModel.id}`)} />
+                                    )
+                                }
+                            </Courses>
+                        </>
+                    :
+                        <UnFound text={`К сожелению по запросу ${query} нечего не найдено..`} />   
             }
         </ContentWrapper>
     )

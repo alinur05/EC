@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import Flex from '../../UI/Flex'
 import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import {DARK_BLACK} from '../../media/colors'
-import CourseLessons from '../common/PrivateComponents/Profile/Cabinet/Create/CourseLessons';
 import CourseBody from '../common/PrivateComponents/Profile/Cabinet/Create/CourseBody';
 import { useDispatch } from 'react-redux';
 import { createCourse, nextStep, resetSteps, setCreateErr } from '../../redux/actions/actions';
@@ -17,6 +16,7 @@ import { useSelector } from 'react-redux';
 import Loader from '../../UI/Loader';
 import useFetching from '../../hooks/useFetching';
 import Error from '../../UI/Error';
+import CourseLessons from '../common/PrivateComponents/Profile/Cabinet/Create/CourseLessons'
 
 const { Step } = Steps;
 
@@ -69,7 +69,7 @@ export default function Create() {
                                 </Steps>    
                             </Header>
                             { step === 1 && <CourseBody onClick={handleNextStep} fields={fields} setFields={setFields}/>}
-                            { step === 2 && <CourseLessons onClick={handleNextStep} />}
+                            { step === 2 && <CourseLessons />}
                             { step === 3 && <CourseSetImage onClick={handleNextStep} />}   
                         </>
                     }

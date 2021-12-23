@@ -5,10 +5,15 @@ import Flex from '../../../../../../UI/Flex'
 import UnFound from '../../../../../../UI/UnFound'
 import defaultCourseImage from '../../../../../../media/defultCourseImage.png'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { DeleteColumnOutlined, DeleteOutlined } from '@ant-design/icons'
+import { Button } from 'antd'
+import { useDispatch } from 'react-redux'
+import { removeCourse } from '../../../../../../redux/actions/actions'
 
 export default function MyCourses() {
     const data = useSelector(state => state.session.userData.userCreateCourseModels) 
     const history = useHistory()
+    const dispatch = useDispatch()
 
     return (
         <SMyCourses>
@@ -29,6 +34,7 @@ export default function MyCourses() {
                             <ClauseBody>
                                 <CourseName>{item.courseModel.courseName}</CourseName>
                                 <Cost>{item.courseModel.price} сом</Cost>
+                                <Button onClick={() => dispatch(removeCourse(item.courseModel.id))}><DeleteOutlined /></Button>
                             </ClauseBody>
                         </Clause>    
                     )

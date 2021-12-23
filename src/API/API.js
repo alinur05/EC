@@ -2,9 +2,11 @@
 // https://educhange.herokuapp.com
 
 import axios from "axios"
+import { getLocalStorage } from "../utiles"
 
-const ENDPOINT = "http://192.168.0.107:8080/api"
+const ENDPOINT = "https://educhange.herokuapp.com/api"
 const ADMIN_TOKEN = "Basic YWRtaW46YWRtaW4="
+const session = getLocalStorage("session")
 
 async function fetcher(method, path, payload, configs) {
     const responce = await (await axios[method](`${ENDPOINT}${path}`, payload, configs))
@@ -74,13 +76,13 @@ class PostService {
 
     // COURSE
 
-    static async setCourseImage(courseId, file, token) {
-        const responce = await fetcher("post", `/course-image/create/${courseId}`, file, {
+    static async setCourseImage(courseId, formData) {
+        console.log(courseId, formData)
+        const responce = await fetcher("post", `/course-image/create/${courseId}`, formData, {
             headers: {
-                Authorization: token
+                Authorization: session.token
             }
         })
-        console.log(responce)
         return responce
     }
 
@@ -91,6 +93,16 @@ class PostService {
             }
         })
 
+        return responce
+    }
+
+    static async removeCourse(courseId) {
+        const responce = await (await fetch(`https://educhange.herokuapp.com/api/course/delete/${courseId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: session.token
+            }
+        })).json()
         return responce
     }
 
@@ -105,6 +117,18 @@ class PostService {
         return commentCourse
     }
 
+    // CREATE
+    
+    static async createLessons(lessons) {
+        lessons.map(async lesson => {
+            const responce = await fetcher("post", "/lesson/create", lesson, {
+                headers: {
+                    Authorization: session.token
+                }
+            })
+            console.log(responce)
+        })
+    }
     // BALANCE
 
     static async getBalance(userId, token) {
@@ -137,7 +161,7 @@ class PostService {
         return result   
     }
     static async editProfile(body) {
-
+        
     }
     static async editAva(file, token) {
         const responce = await fetcher("put", "/user-image/update", file, {

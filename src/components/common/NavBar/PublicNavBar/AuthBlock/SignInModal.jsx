@@ -22,18 +22,13 @@ export default function SignInModal(props) {
     } = props
     
     const dispatch = useDispatch()
-
+    const loading = useSelector(state => state.session.loading)
 
     const [fields, setFields] = useState({username: "", password: ""})
     const {signin} = useSelector(state => state.session.error)
 
-    const [signIn, loading, error] = useFetching(async body => {
-        dispatch(authUser(body))
-        error && dispatch(setAuthError("signin", error))
-    })
-
     const handleSignIn = async () => {
-        signIn(fields)
+        dispatch(authUser(fields))
         const session = getLocalStorage("session")
         if(session) {
             handleModalCancel()
@@ -49,7 +44,7 @@ export default function SignInModal(props) {
             username: user.displayName.split(' ').join('')
         }
         
-        signIn(body)
+        dispatch(authUser(body))
         const session = getLocalStorage("session")
         if(session) {
             handleModalCancel()
@@ -67,9 +62,10 @@ export default function SignInModal(props) {
         dispatch(clearAuthErrors())
     }
 
+
     return (
         <>
-            {loading && <Loader type={"large"}/>}
+
             <SModal
                 title={false}
                 visible={signinModalVisible}
@@ -96,7 +92,12 @@ export default function SignInModal(props) {
                         <PasswordField type="password" placeholder="Пароль" value={fields.password} onChange={e => setFields({...fields, password: e.target.value})} />
                 </ModalBody>
                 <ModalFooter>
-                    <SignUpBtn style={{fontSize: "16px", padding: "9px 50px"}} onClick={handleSignIn}>Войти</SignUpBtn>
+                    {
+                        loading ?
+                            <Loader height="auto" />
+                        :
+                            <SignUpBtn style={{fontSize: "16px", padding: "9px 50px"}} onClick={handleSignIn}>Войти</SignUpBtn>
+                    }
                     <ErrorQuery error={signin} />
                 </ModalFooter>
                 <SigninPropmt onClick={handleAlreadyHasAccount}>Еще нет аккаунта? Регистрация</SigninPropmt>
