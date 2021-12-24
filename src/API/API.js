@@ -5,8 +5,6 @@ import axios from "axios"
 import { getLocalStorage } from "../utiles"
 
 const ENDPOINT = "https://educhange.herokuapp.com/api"
-const ADMIN_TOKEN = "Basic YWRtaW46YWRtaW4="
-const session = getLocalStorage("session")
 
 async function fetcher(method, path, payload, configs) {
     const responce = await (await axios[method](`${ENDPOINT}${path}`, payload, configs))
@@ -75,8 +73,41 @@ class PostService {
 
     // COURSE
 
+    static async updateCourse(body) {
+        const session = getLocalStorage("session")
+        if(body.file.data) {
+            if(body.file.type === "update") {
+                fetcher("put", `/course-image/create/${body.file.id}`, body.file.data, {
+                    headers: {
+                        Authorization: session.token
+                    }
+                })
+            }else if(body.file.type === "create"){
+                fetcher("put", `/course-image/update/${body.file.id}`, body.file.data, {
+                    headers: {
+                        Authorization: session.token
+                    }
+                })
+            }
+        }
+
+        let courseModel = await fetcher("put", "/course/update", body.fields, {
+            headers: {
+                Authorization: session.token
+            }
+        })
+
+        const lessons = await fetcher("get", `/lesson/get-all/by-course-id/${body.fields.id}`)
+
+        let result = {
+            ...courseModel.value,
+            lessons: lessons.value
+        }
+        return result
+    }
+
     static async setCourseImage(courseId, formData) {
-        console.log(courseId, formData)
+    const session = getLocalStorage("session")
         const responce = await fetcher("post", `/course-image/create/${courseId}`, formData, {
             headers: {
                 Authorization: session.token
@@ -85,17 +116,20 @@ class PostService {
         return responce
     }
 
-    static async createCourse(body, token) {
+    static async createCourse(body) {
+    const session = getLocalStorage("session")
         const responce = await fetcher("post", "/course/create", body, {
             headers: {
-                Authorization: token
+                Authorization: session.token
             }
         })
 
         return responce
     }
 
+
     static async removeCourse(courseId) {
+    const session = getLocalStorage("session")
         const responce = await (await fetch(`https://educhange.herokuapp.com/api/course/delete/${courseId}`, {
             method: "DELETE",
             headers: {
@@ -106,16 +140,17 @@ class PostService {
     }
 
     static async commentCourse(body) {
+    const session = getLocalStorage("session")
         const commentCourse = await fetcher("post", "/comment/create", body, {
             headers: {
                 Authorization: session.token
             }
         })
-        console.log(commentCourse)
         return commentCourse
     }
 
     static async saveLesson(lesson) {
+    const session = getLocalStorage("session")
         const responce = await fetcher("put", "/lesson/update", lesson, {
             headers: {
                 Authorization: session.token
@@ -125,7 +160,7 @@ class PostService {
     }   
 
     static async removeLesson(id) {
-        console.log(id)
+    const session = getLocalStorage("session")
         const responce = (await fetch(`https://educhange.herokuapp.com/api/lesson/delete/${id}`, {
             method: "DELETE",
             headers: {
@@ -138,6 +173,7 @@ class PostService {
     // CREATE
     
     static async createLessons(lessons) {
+    const session = getLocalStorage("session")
         lessons.map(async lesson => {
             const responce = await fetcher("post", "/lesson/create", lesson, {
                 headers: {
@@ -149,6 +185,7 @@ class PostService {
     }
 
     static async createLesson(lesson) {
+    const session = getLocalStorage("session")
         const responce = await fetcher("post", "/lesson/create", lesson, {
             headers: {
                 Authorization: session.token
@@ -156,61 +193,35 @@ class PostService {
         }) 
         return responce
     }
-    // BALANCE
-
-    static async getBalance(userId, token) {
-        const responce = await fetcher("get", `/balance/get-by-user-id/${userId}`, null, {
-            headers: {
-                Authorization: token
-            }
-        })
-        return responce
-    }
 
     // PROFILE
 
-    static async getProfile(id, token) {
-        const userModelToSend = await (await fetch(`/user/get-by-id/${id}`, {
-            method: "GET",
+    static async getProfile() {
+        const session = getLocalStorage("session")
+        const userData = await (await fetch(`${ENDPOINT}/user/get-updated-profile`, {
             headers: {
-                Authorization: token
+                Authorization: session.token
             }
         })).json()
 
-        const userBalanceModel = await this.getBalance(id, token)
+        return userData
+    }
 
-        const result = {
-            userModelToSend: userModelToSend,
-            userBalanceModel: userBalanceModel.value
-        }
-
-        console.log(result)
-        return result   
-    }
-    static async editProfile(body) {
-        
-    }
-    static async editAva(file, token) {
-        const responce = await fetcher("put", "/user-image/update", file, {
-            headers: {
-                Authorization: token
-            }
-        })
-        return responce
-    }
 
     // PURCHASE
 
-    static async purchaseCourse(courseId, token) {
-        const responce = await fetcher("post", `/purchase/create-by-course-id/${courseId}`, null, {
+    static async purchaseCourse(courseId) {
+        const session = getLocalStorage("session")
+        const responce = await (await fetch(`${ENDPOINT}/purchase/create-by-course-id/${courseId}`, {
+            method: "POST",
             headers: {
-                Authorization: token
+                Authorization: session.token
             }
-        })
+        })).json()
+        console.log(responce)
         return responce
     }    
 
-    // 
 }
 
 export default PostService

@@ -1,16 +1,55 @@
-import React from 'react'
+import Modal from 'antd/lib/modal/Modal'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { WHITE, YELLOW } from '../../../../media/colors'
+import { DARK_BLACK, WHITE, YELLOW } from '../../../../media/colors'
+import { purchaseCourse } from '../../../../redux/actions/actions'
 import Flex from '../../../../UI/Flex'
+import { Button, notification } from 'antd';
 
-export default function RightBar({cost, lessons}) {
+export default function RightBar({cost, lessons, courseId}) {
+    const dispatch = useDispatch()
+    const [visible, setVisible] = useState(false)
+    const error = useSelector(state => state.purchase.error)
+
+    const openNotification = msg => {
+        notification.open({
+          message: msg
+        })
+      }
+      
+    const handleBuyCourse = () => {
+        dispatch(purchaseCourse(courseId))   
+        
+        if(!error) {
+            setVisible(false)
+        }else {
+            openNotification(error)
+        }
+    }
+
+
+    
     return (
         <SRightBar>
             <CostBlock>
                 <Cost>{cost} cом</Cost>
             </CostBlock>
             <Body>
-                <BuyBtn>Купить</BuyBtn>
+                <BuyBtn onClick={() => setVisible(true)}>Купить</BuyBtn>
+                <Modal
+                    visible={visible}
+                    footer={false}
+                    header={false}
+                    onCancel={() => setVisible(false)}
+                    bodyStyle={{paddingTop: "50px"}}
+                >
+                    <ModalContent>
+                        <Prompt>К оплате: {cost} сом</Prompt>
+                        <Purchase onClick={handleBuyCourse}>Купить</Purchase>
+                    </ModalContent>
+                </Modal>
                 <span style={{fontSize: "16px"}}>Этот курс включает:</span>
                 <List>
                     <Li>{lessons} уроков</Li>
@@ -22,6 +61,34 @@ export default function RightBar({cost, lessons}) {
     )
 }
 
+const Purchase = styled.button`
+    border: 1px solid #e3e3e3;
+    padding: 3px 8px;
+    font-size: 22px;
+    background: none;
+    color: #252525;
+    cursor:pointer;
+    &:hover {
+        border: 1px solid ${DARK_BLACK};
+        color: #000;
+    }
+`
+const Prompt = styled.h3`
+    font-size: 24px;
+    color: #000;
+    margin: 0;
+`
+const ModalContent = styled(Flex)`
+    width: 100%;
+    border: 1px solid #e3e3e3;
+    padding: 10px;  
+    align-items:center;
+    cursor:pointer;
+    justify-content:space-between;
+    &:hover {
+        border: 1px solid ${DARK_BLACK};
+    }
+`
 const Li = styled.li`
     color: gray;
     font-size: 14px;

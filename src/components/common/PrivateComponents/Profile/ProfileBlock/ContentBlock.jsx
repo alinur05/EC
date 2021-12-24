@@ -18,23 +18,9 @@ export default function ContentBlock() {
     const handleFieldChainging = e => setFields({...fields, [e.target.name]:e.target.value})
 
 
-    const isChanged = useMemo(() => {
-        let result = false
-
-            for(let i in fields) {
-                if(fields[i] !== userData.userModelToSend[i] && i !== "file") {
-                    result = true
-                }
-            }
-
-        return result
-    }, [fields])
-
     const handleSave = () => {
         dispatch(editProfile(fields))
     }
-
-
 
     return (
         <SContentBlock>

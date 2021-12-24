@@ -30,7 +30,7 @@ export default function MyCourse() {
 
     return (
         loading ?
-        <Loader size="64px" />
+        <Loader size="36px" />
     :
 
     <ContentWrapper>

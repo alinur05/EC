@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Flex from '../../../../../UI/Flex'
 import defaultUserAva from '../../../../../media/defaultUserAva.png'
@@ -6,11 +6,12 @@ import { useSelector } from 'react-redux'
 import ContentBlock from './ContentBlock'
 import { useDispatch } from 'react-redux'
 import { getLocalStorage } from '../../../../../utiles'
-import { editAva } from '../../../../../redux/actions/actions'
+import { editAva, getProfile } from '../../../../../redux/actions/actions'
 
 export default function ProfileBlock() {
     const dispatch = useDispatch()
     const userData = useSelector(state => state.session.userData)
+
     const [file, setFile] = useState(null)
     
     const handleEditAva = () => {

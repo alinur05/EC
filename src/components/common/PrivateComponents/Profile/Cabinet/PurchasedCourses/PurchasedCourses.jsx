@@ -21,7 +21,7 @@ export default function PurchasedCourses() {
                         <Clause>    
                             <ClauseImage>
                                 <Image 
-                                    src={item.imageModel ? item.imageModel.imageUrl : defaultCourseImage}
+                                    src={item.imageModel ? item.imageModel.courseImageUrl : defaultCourseImage}
                                 /> 
                             </ClauseImage>
                             <ClauseBody>

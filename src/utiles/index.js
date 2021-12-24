@@ -1,4 +1,12 @@
+// import others from '../media/categoryImages/others'
 
+// export const getImageOnCategory = category => {
+//     switch(category) {
+
+//         default:
+//             return others
+//     }
+// }
 
 export const signupFieldsValidator = (fields) => {
     let result = {
@@ -88,4 +96,24 @@ export const getUsername = email => {
     }
 
     return email.slice(0, ind)
+}
+
+
+export const checkEmail = str => {
+    if(!str) return true
+
+    if(str.includes("@")) {
+        return true
+    }else return false
+}
+export const checkNumber = num => {
+    if(!num) {
+        return true
+    }
+    
+    if(num.length > 9 && num[0] === "0") {
+        return true
+    }else {
+        return false
+    }
 }

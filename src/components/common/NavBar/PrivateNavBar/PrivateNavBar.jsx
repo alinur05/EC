@@ -38,7 +38,7 @@ export default function PrivateNavBar() {
                 </Right>
                 <Left>
                     <BalanceText>Баланс:</BalanceText>
-                    <Balance>{userData.userBalanceModel.userBalance} сом</Balance>
+                    <Balance>{userData.userBalanceModel && userData.userBalanceModel.userBalance} сом</Balance>
                 </Left> 
                 <DownOutlined />
             </SPrivateNavBar>

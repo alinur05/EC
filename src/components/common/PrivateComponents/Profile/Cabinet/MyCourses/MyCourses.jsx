@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { removeCourse } from '../../../../../../redux/actions/actions'
 
 export default function MyCourses() {
-    const data = useSelector(state => state.session.userData.userCreateCourseModels) 
+    const data = useSelector(state => state.session.userData.userCreateCourseModels) || []
     const history = useHistory()
     const dispatch = useDispatch()
 
@@ -28,7 +28,7 @@ export default function MyCourses() {
                         <Clause onClick={() => history.push(`/profile/mycourses/${item.courseModel.id}`)}>    
                             <ClauseImage>
                                 <Image 
-                                    src={item.imageModel ? item.imageModel.imageUrl : defaultCourseImage}
+                                    src={item.imageModel ? item.imageModel.courseImageUrl : defaultCourseImage}
                                 /> 
                             </ClauseImage>
                             <ClauseBody>

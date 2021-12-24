@@ -163,7 +163,7 @@ const AddBtn = styled.button`
 `
 const Title = styled.h2`
     margin: 0;
-    font-size: 32px;
+    font-size: 24px;
 `
 
 const SHeader = styled(Flex)`

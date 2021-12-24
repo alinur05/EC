@@ -132,7 +132,7 @@ export default function CourseDetails() {
                     </LessonsBlock>
                     <CommentBlock />
                 </LeftContent>
-                <RightBar cost={course.courseModel && course.courseModel.price} lessons={course.lessonCount && course.lessonCount} />
+                <RightBar courseId={course.courseModel && course.courseModel.id} cost={course.courseModel && course.courseModel.price} lessons={course.lessonCount && course.lessonCount} />
             </ContentWrapper>
         </div>
     )

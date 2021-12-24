@@ -5,7 +5,7 @@ import Flex from '../../UI/Flex'
 import Cabinet from '../common/PrivateComponents/Profile/Cabinet/Cabinet'
 import ProfileBlock from '../common/PrivateComponents/Profile/ProfileBlock/ProfileBlock'
 import { useDispatch } from 'react-redux'
-import { getProfile } from '../../redux/actions/actions'
+import { cleanUpProfile, getProfile } from '../../redux/actions/actions'
 import { getLocalStorage } from '../../utiles'
 import Title from '../../UI/Title'
 

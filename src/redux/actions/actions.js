@@ -1,12 +1,31 @@
 import PostService from '../../API/API'
 import { getCategoriesCapitaled, getLocalStorage, removeLocalStorage, setLocalStorage } from '../../utiles'
-import { SET_MY_COURSE_LESSON, REMOVE_LESSON, REMOVE_COURSE, CREATE_LESSONS, ADD_LESSON, GET_PROFILE, PURCHASE_COURSE, STEP_RESET, SET_CREATE_ERROR, SET_COURSE_IMAGE, CREATE_NEW_COURSE, GET_COURSES_BY_QUERY, CLEAN_UP_SEARCHED_COURSES, CLEAN_UP_CATEGORY_COURSES, GET_COURSE_BY_CATEGORY, COMMENT_COURSE, EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS, NEXT_STEP, TOGGLE_CREATE_LOADING, TOGGLE_SEARCH_LOADING, SET_SEARCH_ERROR, TOGGLE_SESSION_LOADING, CLEAN_UP_MY_COURSE, SET_MY_COURSE_DATA, SET_MY_COURSE_ERROR, TOGGLE_MY_COURSE_LOADING, SAVE_LESSON} from '../types'
+import { CLEAN_UP_PROFILE, UPDATE_COURSE, SET_MY_COURSE_LESSON, REMOVE_LESSON, REMOVE_COURSE, CREATE_LESSONS, ADD_LESSON, GET_PROFILE, PURCHASE_COURSE, STEP_RESET, SET_CREATE_ERROR, SET_COURSE_IMAGE, CREATE_NEW_COURSE, GET_COURSES_BY_QUERY, CLEAN_UP_SEARCHED_COURSES, CLEAN_UP_CATEGORY_COURSES, GET_COURSE_BY_CATEGORY, COMMENT_COURSE, EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS, NEXT_STEP, TOGGLE_CREATE_LOADING, TOGGLE_SEARCH_LOADING, SET_SEARCH_ERROR, TOGGLE_SESSION_LOADING, CLEAN_UP_MY_COURSE, SET_MY_COURSE_DATA, SET_MY_COURSE_ERROR, TOGGLE_MY_COURSE_LOADING, SAVE_LESSON, SAVE_COURSE, TOGGLE_PURCHASE_LOADING, SET_PURCHASE_ERROR, SET_SESSION_ERR} from '../types'
 
 // SESSION
 
 export const setAuthError = (authKey, value) => ({type: SET_AUTH_ERROR, payload: {authKey, value}})
 
+export const toggleSessionLoading = () => ({type: TOGGLE_SESSION_LOADING})
 export const clearAuthErrors = () => ({type: CLEAR_AUTH_ERRORS})
+
+export const getProfile = () => async dispatch => {
+    dispatch(toggleSessionLoading())
+        const responce = await PostService.getProfile()
+        if(responce.status !== "FAIL") {
+            const session = getLocalStorage("session")
+            let result = {
+                ...responce.value,
+                token: session.token
+            }
+            removeLocalStorage("lesson")
+            setLocalStorage("session", result)
+            dispatch({type: GET_PROFILE, payload: result})
+        }else {
+            dispatch({type: SET_SESSION_ERR, payload: responce.details})
+        }   
+    dispatch(toggleSessionLoading())
+}
 
 export const signUpUser = body => async dispatch => {
     dispatch(toggleSessionLoading())
@@ -22,7 +41,7 @@ export const signUpUser = body => async dispatch => {
     dispatch(toggleSessionLoading())
 }
 
-export const toggleSessionLoading = () => ({type: TOGGLE_SESSION_LOADING})
+
 export const authUser = body => async dispatch => {
     dispatch(toggleSessionLoading())
     const responce = await PostService.sign_in(body)
@@ -118,15 +137,6 @@ export const removeCourse = courseId => async dispatch => {
 
 // PROFILE
 
-export const getProfile = () => async dispatch => {
-    const session = getLocalStorage("session")
-    const userData = await PostService.getProfile(session.userModelToSend.id, session.token)
-    console.log(userData)
-    // if(responce.status !== "FAIL") {
-    //     dispatch({type: GET_PROFILE, payload: responce.value})
-    // }
-}
-
 export const editProfile = (body) => async dispatch => {
     const responce = await PostService.editProfile(body)
     dispatch({type: EDIT_PROFILE, paylaod: responce.value})
@@ -178,13 +188,18 @@ export const removeLesson = id => ({type: REMOVE_LESSON, payload: id})
 
 // PURCHASE
 
-export const purchaseCourse = (courseId, token) => async dispatch => {
-    const responce = await PostService.purchaseCourse(courseId, token)
+export const togglePurchaseLoading = () => ({type: TOGGLE_PURCHASE_LOADING})
+export const setPurchaseError = error => ({type: SET_PURCHASE_ERROR, payload: error})
+
+export const purchaseCourse = (courseId) => async dispatch => {
+    const responce = await PostService.purchaseCourse(courseId)
 
     if(responce.status !== "FAIL") {
+        console.log("purchased!")
         dispatch({type: PURCHASE_COURSE, payload: responce.value})
+        dispatch(getProfile())
     }else {
-        
+        dispatch(setPurchaseError(responce.details))
     }
 
 }
@@ -223,4 +238,11 @@ export const saveLesson = lesson => async dispatch => {
 export const removeMyCourseLesson = id => async dispatch => {
     const responce = await PostService.removeLesson(id)
     dispatch({type: REMOVE_LESSON, payload: responce.value})
+}
+
+export const updateCourse = body => async dispatch => {
+    dispatch(toggleMyCourseLoading())
+        const responce = await PostService.updateCourse(body)
+        dispatch({type: UPDATE_COURSE, payload: responce})
+    dispatch(toggleMyCourseLoading())
 }
