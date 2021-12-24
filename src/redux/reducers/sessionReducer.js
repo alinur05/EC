@@ -1,4 +1,5 @@
 import { EDIT_PROFILE, AUTH_USER, CLEAR_AUTH_ERRORS, LOGOUT_USER, SET_AUTH_ERROR } from "../types"
+import {getLocalStorage} from "../../utiles";
 
 const initialState = {
     isAuth: false,

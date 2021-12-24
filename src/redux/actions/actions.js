@@ -15,6 +15,7 @@ export const signUpUser = body => async dispatch => {
         dispatch(setAuthError("signup", responce.details))
     }else {
         setLocalStorage("session", responce.value)
+        setLocalStorage("TOKEN", responce.value.token)
         dispatch({type: AUTH_USER, payload: responce.value})
         dispatch(clearAuthErrors())
     }
@@ -28,6 +29,7 @@ export const authUser = body => async dispatch => {
         dispatch(setAuthError("signin", responce.details))
     }else {
         setLocalStorage("session", responce.value)
+        setLocalStorage("TOKEN", responce.value.token)
         dispatch({type: AUTH_USER, payload: responce.value})
         dispatch(clearAuthErrors())
     }
@@ -35,6 +37,7 @@ export const authUser = body => async dispatch => {
 
 export const logoutUser = () => {
     removeLocalStorage("session")
+    removeLocalStorage("TOKEN")
     return {type: LOGOUT_USER}
 }
 
@@ -44,7 +47,6 @@ export const logoutUser = () => {
 export const getCoures = (token) => async dispatch => {
     const responce = await PostService.getAllCourses()
     const {allCourses, categories} = responce
-    console.log(categories.value)
     const splittedByCategories = await PostService.getCoursesByCategoryId(categories.value, token)
 
     if(allCourses.status === "FAIL" ) {
@@ -63,13 +65,15 @@ export const cleanCourses = () => ({type: CLEAN_UP_ALL_COURSES})
 export const clearCourseDetails = () => ({type: CLEAN_UP_DETAILS})
 export const getCourseDetails = id => async dispatch => {
     const responce = await PostService.getCourseDetails(id)
-    console.log(responce)
     dispatch({type: GET_COURSE_DETAILS, payload: responce})
 }
 
 // PROFILE
 
 export const editProfile = (body) => async dispatch => {
-    const responce = await PostService.editProfile(body)
-    dispatch({type: EDIT_PROFILE, paylaod: responce.value})
+    const {value} = await PostService.editProfile(body)
+    if(value){
+        setLocalStorage('session', value)
+    }
+    dispatch({type: EDIT_PROFILE, paylaod: value})
 }

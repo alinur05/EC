@@ -1,68 +1,97 @@
-import { EditOutlined } from '@ant-design/icons/lib/icons'
-import React, { useMemo, useState } from 'react'
+import { EditOutlined,CloseOutlined} from '@ant-design/icons/lib/icons'
+import React, {useMemo, useRef, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { editProfile } from '../../../../../redux/actions/actions'
 import Flex from '../../../../../UI/Flex'
+import {getLocalStorage} from '../../../../../utiles'
 
 export default function ContentBlock() {
     const dispatch = useDispatch()
+    let inputFocusName = useRef()
+    let inputFocusEmail = useRef()
+
     const userData = useSelector(state => state.session.userData)
-    const [fields, setFields] = useState({
-        fullName: userData.userModelToSend.fullName || "",
-        email: userData.userModelToSend.email || "",
-        birthDay: userData.userModelToSend.birthDay || "",
-        file: null
+
+    const storage = getLocalStorage('session').userModelToSend
+
+    let [isDisabled,setIsDisabled] = useState({
+        name: true,
+        email: true
     })
 
-    const handleFieldChainging = e => setFields({...fields, [e.target.name]:e.target.value})
+    const [fields, setFields] = useState({
+        id: storage.id,
+        password: null,
+        fullName: storage.fullName || "",
+        email: storage.email || "",
+        birthDay:  "",
+    })
 
 
-    const isChanged = useMemo(() => {
-        let result = false
+    const handleFieldChanging = e => setFields({...fields, [e.target.name]:e.target.value})
 
-            for(let i in fields) {
-                if(fields[i] !== userData.userModelToSend[i] && i !== "file") {
-                    result = true
-                }
-            }
 
-        return result
-    }, [fields])
+    // const isChanged = useMemo(() => {
+    //     let result = false
+    //
+    //         for(let i in fields) {
+    //             if(fields[i] !== userData.userModelToSend[i] && i !== "file") {
+    //                 result = true
+    //             }
+    //         }
+    //
+    //     return result
+    // }, [fields])
 
-    const handleSave = () => {
+
+   const toggler = (prop)=>{
+        return () => {
+            setIsDisabled({...isDisabled,...prop })
+            const timer = setTimeout(()=>{
+                inputFocusName.current.focus()
+                inputFocusEmail.current.focus()
+            },100)
+        }
+   }
+
+
+    const handleSave = async () => {
         dispatch(editProfile(fields))
     }
 
-
-
     return (
         <SContentBlock>
-            <UserName>@{userData.userModelToSend && userData.userModelToSend.username}</UserName>
+            <UserName>@{storage && storage.username}</UserName>
             <List>
                 <Clause>
                     <span>Имя: </span>
-                    <Field 
-                        type="text"
+                    <Field
+                        onDoubleClick={(e)=>console.log()}
+                        ref={inputFocusName}
+                        type="input"
                         placeholder="Имя"
                         name="fullName"
+                        onBlur={toggler({name:true})}
                         value={fields.fullName}
-                        onChange={handleFieldChainging}
-                        disabled
+                        onChange={handleFieldChanging}
+                        disabled={isDisabled.name}
                     />
-                    <EditOutlined style={{cursor: "pointer"}} />
+                    { isDisabled.name ? <EditOutlined onClick={toggler({name: false})} style={{cursor: "pointer"}}/> : <CloseOutlined onClick={toggler({name: true})}/>}
                 </Clause>
                 <Clause>
                     <span>Email: </span>
-                    <Field 
+                    <Field
+                        ref={inputFocusEmail}
                         type="email"
                         placeholder="email"
                         name="email"
+                        onBlur={toggler({email:true})}
                         value={fields.email}
-                        onChange={handleFieldChainging}
-                        disabled
+                        onChange={handleFieldChanging}
+                        disabled={isDisabled.email}
                     />
-                    <EditOutlined style={{cursor: "pointer"}}/>
+                    { isDisabled.email ? <EditOutlined onClick={toggler({email: false})} style={{cursor: "pointer"}}/> : <CloseOutlined onClick={toggler({email: true})}/>}
                 </Clause>
                 <Clause>
                     <span>Баланс: {userData.userBalanceModel && userData.userBalanceModel.userBalance}</span>
@@ -74,7 +103,7 @@ export default function ContentBlock() {
                 style={{display:"none"}}
                 onChange={e => setFields({...fields, file: e.target.files[0]})}
             />
-            <SaveBtn onClick={handleSave}><label htmlFor='ava'>Сохранить</label></SaveBtn>
+            <SaveBtn onClick={handleSave}><label style={{cursor:'pointer'}}>Сохранить</label></SaveBtn>
         </SContentBlock>
     )
 }
@@ -86,6 +115,7 @@ const SaveBtn = styled.button`
     margin-top: 30px;
     align-self:flex-end;
     padding: 5px 8px;
+    cursor:pointer;
 `
 const Field = styled.input`
     outline: none;

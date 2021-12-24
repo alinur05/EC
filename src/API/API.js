@@ -1,8 +1,9 @@
 // "http://192.168.0.107:8080"
 
 import axios from "axios"
+import {getLocalStorage} from "../utiles";
 
-const ENDPOINT = "http://192.168.0.107:8080/api"
+const ENDPOINT = 'https://educhange.herokuapp.com/api'
 const ADMIN_TOKEN = "Basic YWRtaW46YWRtaW4="
 
 async function fetcher(method, path, payload, configs) {
@@ -62,8 +63,22 @@ class PostService {
         return result
     }
     static async editProfile(body) {
-
+        const response = await fetcher("put", `/user/update`,body, {
+            headers: {
+                Authorization: getLocalStorage('TOKEN')
+            }
+        })
+        return response
     }
+    static async getUserByID(id) {
+        const {data} = await axios.get(`${ENDPOINT}/user/get-by-id/${id}`, {
+            headers: {
+                Authorization: ADMIN_TOKEN
+            }
+        })
+       return data
+    }
+
 }
 
 export default PostService
