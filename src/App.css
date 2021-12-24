@@ -8,7 +8,7 @@
   padding: 0;
   box-sizing: border-box ;
   font-family: 'Source Sans Pro', sans-serif;
-  transition-duration: 0.2s;
+  transition-duration: 0.2s !important;
   font-weight: 400;
 }
 

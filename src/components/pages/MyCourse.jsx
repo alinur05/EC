@@ -9,10 +9,10 @@ import { cleanUpMyCourse, getMyCourseData } from '../../redux/actions/actions'
 import Loader from './../../UI/Loader'
 import Error from './../../UI/Error'
 import Title from './../../UI/Title'
-import InfoBlock from '../common/PrivateComponents/Profile/MyCourse/InfoBlock'
-import LessonsBlock from '../common/PrivateComponents/Profile/MyCourse/LessonsBlock'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import { ArrowLeftOutlined } from '@ant-design/icons'
+import LessonsBlock from '../common/PrivateComponents/Profile/Cabinet/MyCourse/Lessons/LessonsBlock'
+import InfoBlock from '../common/PrivateComponents/Profile/Cabinet/MyCourse/Info/InfoBlock'
 
 export default function MyCourse() {
     const {id} = useParams()
@@ -20,7 +20,6 @@ export default function MyCourse() {
     const history = useHistory()
     const data = useSelector(state => state.myCourse.myCourse)
     const loading = useSelector(state => state.myCourse.loading)
-    const error = useSelector(state => state.myCourse.error)
 
     useEffect(() => {
         dispatch(getMyCourseData(id))
@@ -33,21 +32,18 @@ export default function MyCourse() {
         loading ?
         <Loader size="64px" />
     :
-        error ?
-            <Error text={error}/>
-        :
 
-            <ContentWrapper>
-                <Flex onClick={() => {history.push("/profile")}} style={{cursor:"pointer"}} gap="5px" align="center" >
-                    <ArrowLeftOutlined style={{fontSize: "20px", color: "gray"}} />
-                    <GoBackBtn>назад</GoBackBtn>
-                </Flex>    
-                <Title>Мой курс</Title>
-                <BlocksWrapper>
-                    <InfoBlock />
-                    <LessonsBlock />
-                </BlocksWrapper>
-            </ContentWrapper>
+    <ContentWrapper>
+        <Flex onClick={() => {history.push("/profile")}} style={{cursor:"pointer"}} gap="5px" align="center" >
+            <ArrowLeftOutlined style={{fontSize: "20px", color: "gray"}} />
+            <GoBackBtn>назад</GoBackBtn>
+        </Flex>    
+        <Title size="64px">{data.courseModel && data.courseModel.courseName}</Title>
+        <BlocksWrapper>
+            <InfoBlock data={data}/>
+            <LessonsBlock data={data.lessons} id={id} />
+        </BlocksWrapper>
+    </ContentWrapper>
     )
 }
 

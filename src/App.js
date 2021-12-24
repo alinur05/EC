@@ -14,10 +14,6 @@ import useFetching from './hooks/useFetching';
 function App() {
   const dispatch = useDispatch()
 
-  const [getCourses, loading, error] = useFetching(async () => {
-    dispatch(getCoures())
-  })
-
   useEffect(() => {
     dispatch(getCoures())
     const userData = getLocalStorage("session")

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Flex from '../../../../../UI/Flex'
+import Flex from '../../../../../../../UI/Flex'
 
 export default function InfoBlock({data}) {
     return (

@@ -1,29 +1,28 @@
-import { Button } from 'antd'
-import React, { useState } from 'react'
+import Checkbox from 'antd/lib/checkbox/Checkbox'
+import Modal from 'antd/lib/modal/Modal'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
-import Flex from '../../../../../../UI/Flex'
-import { isGoodUrl } from '../../../../../../utiles'
-import LessonList from './LessonList'
-import playIcon from '../../../../../../media/play-button.png'
-import { useDispatch } from 'react-redux'
-import { addLesson, createLessons, setCreateErr } from '../../../../../../redux/actions/actions'
-import { YELLOW } from '../../../../../../media/colors'
-import Checkbox from 'antd/lib/checkbox/Checkbox'
-import Loader from '../../../../../../UI/Loader'
-import Error from '../../../../../../UI/Error'
+import { DARK_BLACK, YELLOW } from '../../../../../../../media/colors'
+import { addLesson, addMyCourseLesson, cleanUpMyCourse, getMyCourseData, setCreateErr, setMyCourseError } from '../../../../../../../redux/actions/actions'
+import Error from '../../../../../../../UI/Error'
+import Flex from '../../../../../../../UI/Flex'
+import { isGoodUrl } from '../../../../../../../utiles'
+import playIcon from '../../../../../../../media/play-button.png'
+import { useParams } from 'react-router-dom'
+import Loader from '../../../../../../../UI/Loader'
 
-export default function CourseLessons({onClick}) {
-    const lessons = useSelector(state => state.create.lessons) || []
-    const data = useSelector(state => state.create.data) || {}
+export default function Header({id}) {
+    const [visible, setVisible] = useState(false)
     const dispatch = useDispatch()
-    const loading = useSelector(state => state.create.loading)
-    const error = useSelector(state => state.create.error)
+    const loading = useSelector(state => state.myCourse.loading)
+    const error = useSelector(state => state.myCourse.error)
     
-    let [isForFree, setIsForFree] = useState(false)
+    // let [isForFree, setIsForFree] = useState(false)
 
     const [lesson, setLesson] = useState({
-        "courseId": data.courseModel.id,
+        "courseId": id,
         "isVisible": false,
         "lessonInfo": "",
         "lessonUrl": ""
@@ -31,33 +30,40 @@ export default function CourseLessons({onClick}) {
 
     const handleAddLesson = () => {
         if(lesson.lessonInfo && lesson.lessonUrl) {
-            dispatch(addLesson({...lesson, isVisible: isForFree}))
+            dispatch(addMyCourseLesson(lesson))
             setLesson({
-                "courseId": data.courseModel.id,
+                "courseId": id,
                 "isVisible": false,
                 "lessonInfo": "",
                 "lessonUrl": ""
             })
-            dispatch(setCreateErr(""))
+            handleCloseModal()
         }else {
-            dispatch(setCreateErr("Заполните все поля"))
+            dispatch(setMyCourseError("Заполните все поля"))
         }
     }
 
-
-    const handleLessonsStep = () => {
-        dispatch(createLessons(lessons))
+    const handleCloseModal = () => {
+        setVisible(false)
+        setLesson({
+            "courseId": id,
+            "isVisible": false,
+            "lessonInfo": "",
+            "lessonUrl": ""
+        })
+        dispatch(setMyCourseError(""))
     }
 
     return (
-        <Lesson>
-            {
-                loading ?
-                    <Loader />
-                :
-                <>   
-                    <LessonList data={lessons} />
-                    <CreateBody>
+        <SHeader>
+            <Title>Уроки</Title>
+            <AddBtn onClick={() => setVisible(true)}>Добавить +</AddBtn>
+            <Modal
+            header={false}
+            footer={false}
+            visible={visible} 
+            onCancel={handleCloseModal}>
+                <CreateBody>
                         <VideoWrapper>
                             {
                                 isGoodUrl(lesson.lessonUrl) ?
@@ -75,7 +81,14 @@ export default function CourseLessons({onClick}) {
                                     value={lesson.lessonUrl}
                                     onChange={e => setLesson({...lesson, lessonUrl: e.target.value})}
                                 />   
-                                <CreateBtn onClick={handleAddLesson}>Добавить</CreateBtn>
+                                {
+                                    loading ?
+                                        <Loader width='auto' height='auto'/>
+                                    :
+
+                                    <CreateBtn onClick={handleAddLesson}>Добавить</CreateBtn>
+                                }
+
                             </Flex>
                             <MyInput
                                 width="100%"
@@ -85,19 +98,16 @@ export default function CourseLessons({onClick}) {
                             />   
                             <Flex align="center" gap="10px">
                                 <Checkbox 
-                                    onChange={e => setIsForFree(e.target.checked)}
+                                    defaultChecked={false}
+                                    onChange={e => setLesson({...lesson, isVisible: e.target.checked})}
                                 >Показывать бесплатно
                                 </Checkbox>
                             </Flex>
                             <Error size="14px" text={error} width="auto" height="auto"/>
                         </Flex>
-                    </CreateBody>   
-                </>
-            }
-            <Footer>
-                <NextBtn onClick={handleLessonsStep}>Далее</NextBtn>
-            </Footer>
-        </Lesson>
+                </CreateBody>
+            </Modal>
+        </SHeader>
     )
 }
 
@@ -135,28 +145,32 @@ const UrlInput = styled(MyInput)`
 const CreateBody = styled(Flex)`
     width: 100%;
     gap: 20px;
+    padding:20px 0px;
     align-items:center;
 `
-const NextBtn = styled.button`
-    font-size: 20px;
-    border: 1px solid #e3e3e3;
+const AddBtn = styled.button`
+    border:1px solid #aeaeae;
     background: none;
+    padding: 3px 8px;
+    font-size: 14px;
     cursor:pointer;
+    color: #757575;
     border-radius: 5px;
-    padding: 5px 8px;
     &:hover {
-     border: 1px solid #aeaeae;
+        border:1px solid ${DARK_BLACK};
+        color:  #000;
     }
 `
-const Footer = styled(Flex)`
-    width: 100%;
-    padding: 10px 0px;
-    justify-content:flex-end;
-` 
+const Title = styled.h2`
+    margin: 0;
+    font-size: 32px;
+`
 
-const Lesson = styled(Flex)`
-    flex-direction:column;
+const SHeader = styled(Flex)`
     width: 100%;
-    padding: 10px 0px;
-    gap: 20px;
+    height: 50px;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom: 1px solid #e3e3e3;
+    padding: 0px 30px
 `

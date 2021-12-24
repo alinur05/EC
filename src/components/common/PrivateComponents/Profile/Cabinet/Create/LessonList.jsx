@@ -1,6 +1,6 @@
 import { DeleteOutlined, EyeOutlined, LockOutlined } from '@ant-design/icons'
-import React from 'react'
-import styled from 'styled-components'
+import React, { useState } from 'react'
+import styled, {css} from 'styled-components'
 import Flex from '../../../../../../UI/Flex'
 import { handleShortTitle, isGoodUrl } from '../../../../../../utiles'
 import player from '../../../../../../media/play-button.png'
@@ -12,10 +12,20 @@ import { RED } from '../../../../../../media/colors'
 import { useDispatch } from 'react-redux'
 import { removeLesson } from '../../../../../../redux/actions/actions'
 import { useHistory } from 'react-router-dom'
+import {Modal} from 'antd'
+import {DARK_BLACK, YELLOW} from '../../../../../../media/colors'
+import {WarningOutlined} from '@ant-design/icons'
 
 export default function LessonList({data}) {
     const dispatch = useDispatch()
     const history = useHistory()
+
+    const [visible, setVisible] = useState(false)
+
+    const handleRemoveLesson = id => {
+        setVisible(false)
+        dispatch(removeLesson(id))
+    }
 
     return (
         <SLessonList>
@@ -23,7 +33,7 @@ export default function LessonList({data}) {
                 data.map((lesson, index) => 
                 <Card
                     key={lesson.id}
-                    timeout={500}
+                    timeout={2000}
                     classNames="item"
                 >
                     <Lesson>
@@ -51,9 +61,23 @@ export default function LessonList({data}) {
                                             <LockOutlined style={{fontSize: "20px"}}/>
                                     }
                                 </span>
-                                <RemoveBtn onClick={() => dispatch(removeLesson(lesson.id))}>
+                                <RemoveBtn onClick={() => setVisible(true)}>
                                     <DeleteOutlined />
                                 </RemoveBtn>
+                                <Modal 
+                                header={false}
+                                footer={false}
+                                visible={visible} 
+                                onCancel={() => setVisible(false)}>
+                                    <Flex direction="column" align="center" gap="10px">
+                                        <WarningOutlined style={{color:YELLOW, fontSize: "48px"}} />
+                                        <WarnText>Вы уверены?</WarnText>
+                                        <Flex gap="10px" justify="center" width="100%">
+                                            <ModalBtn onClick={() => setVisible(false)}>отмена</ModalBtn>
+                                            <ModalBtn delete onClick={() => handleRemoveLesson(lesson.id)}>удалить</ModalBtn>
+                                        </Flex>
+                                    </Flex>
+                                </Modal>
                             </AdjustBlock>
                         </Body>
                     </Lesson>
@@ -64,7 +88,24 @@ export default function LessonList({data}) {
     )
 }
 
-
+const WarnText = styled.h3`
+    font-size: 24px;
+`
+const ModalBtn = styled.button`
+    font-size: 16px;
+    padding: 3px 13px;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    background: none;
+    cursor:pointer;
+    &:hover {
+        border: 1px solid ${DARK_BLACK};
+        ${props => props.delete && css`
+            border: 1px solid ${RED};
+            color: ${RED};
+        `}
+    }
+`
 const Img = styled.img`
     width: 100%;
     height: 100%;

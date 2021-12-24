@@ -9,6 +9,7 @@ export default function AppRouter() {
     const isAuth = useSelector(state => state.session.isAuth)
 
     return (
+        isAuth !== null &&
         isAuth ?
             <Switch>
                 {

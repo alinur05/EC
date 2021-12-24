@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-export default function Title({children, props}) {
+export default function Title({children, size}) {
     return (
-        <STitile {...props}>
+        <STitile size={size}>
             {children}
         </STitile>
     )
@@ -11,6 +11,6 @@ export default function Title({children, props}) {
 
 const STitile = styled.h1`
     display: block;
-    margin: 0px 0px 30px 0px;
-    font-size: 36px;
+    margin: 0px 0px 20px 0px;
+    font-size: ${({size}) => size || "36px"};
 `

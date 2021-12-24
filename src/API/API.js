@@ -59,7 +59,6 @@ class PostService {
             ...responce.value,
             lessons: lessons.value
         }
-        console.log(result)
         return result
     }
 
@@ -106,15 +105,34 @@ class PostService {
         return responce
     }
 
-    static async commentCourse(body, token) {
-        console.log(token)
+    static async commentCourse(body) {
         const commentCourse = await fetcher("post", "/comment/create", body, {
             headers: {
-                Authorization: token
+                Authorization: session.token
             }
         })
         console.log(commentCourse)
         return commentCourse
+    }
+
+    static async saveLesson(lesson) {
+        const responce = await fetcher("put", "/lesson/update", lesson, {
+            headers: {
+                Authorization: session.token
+            }
+        })
+        return responce
+    }   
+
+    static async removeLesson(id) {
+        console.log(id)
+        const responce = (await fetch(`https://educhange.herokuapp.com/api/lesson/delete/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: session.token
+            }
+        })).json()
+        return responce
     }
 
     // CREATE
@@ -128,6 +146,15 @@ class PostService {
             })
             console.log(responce)
         })
+    }
+
+    static async createLesson(lesson) {
+        const responce = await fetcher("post", "/lesson/create", lesson, {
+            headers: {
+                Authorization: session.token
+            }
+        }) 
+        return responce
     }
     // BALANCE
 
@@ -182,6 +209,8 @@ class PostService {
         })
         return responce
     }    
+
+    // 
 }
 
 export default PostService
