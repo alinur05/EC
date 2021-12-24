@@ -20,10 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed7ca24f-0103-4c87-8e1d-747da89a9515" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/API/API.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/API/API.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common/PrivateComponents/Profile/ProfileBlock/ContentBlock.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common/PrivateComponents/Profile/ProfileBlock/ContentBlock.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/actions/actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/actions/actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/reducers/sessionReducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/reducers/sessionReducer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +70,7 @@
       <workItem from="1640189689227" duration="331000" />
       <workItem from="1640190023913" duration="58000" />
       <workItem from="1640190086460" duration="338000" />
-      <workItem from="1640190447005" duration="18958000" />
+      <workItem from="1640190447005" duration="19648000" />
     </task>
     <servers />
   </component>
@@ -97,10 +94,10 @@
       <screen x="0" y="0" width="1536" height="864" />
     </state>
     <state x="223" y="87" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.864@0.0.1536.864" timestamp="1640020748540" />
-    <state x="478" y="152" width="579" height="560" key="find.popup" timestamp="1640373792140">
+    <state x="798" y="149" width="579" height="560" key="find.popup" timestamp="1640377614582">
       <screen x="0" y="0" width="1536" height="864" />
     </state>
-    <state x="478" y="152" width="579" height="560" key="find.popup/0.0.1536.864/-1366.0.1366.768@0.0.1536.864" timestamp="1640373792140" />
+    <state x="798" y="149" width="579" height="560" key="find.popup/0.0.1536.864/-1366.0.1366.768@0.0.1536.864" timestamp="1640377614582" />
     <state x="478" y="152" width="579" height="560" key="find.popup/0.0.1536.864@0.0.1536.864" timestamp="1640189035363" />
     <state x="425" y="85" width="670" height="676" key="search.everywhere.popup" timestamp="1640025314266">
       <screen x="0" y="0" width="1536" height="864" />
