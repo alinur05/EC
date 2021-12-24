@@ -9,9 +9,9 @@ export default function ContentBlock() {
     const dispatch = useDispatch()
     const userData = useSelector(state => state.session.userData)
     const [fields, setFields] = useState({
-        fullName: userData.userModelToSend.fullName || "",
-        email: userData.userModelToSend.email || "",
-        birthDay: userData.userModelToSend.birthDay || "",
+        fullName: userData.userModelToSend && userData.userModelToSend.fullName ,
+        email: userData.userModelToSend && userData.userModelToSend.email ,
+        birthDay: userData.userModelToSend && userData.userModelToSend.birthDay ,
         file: null
     })
 
