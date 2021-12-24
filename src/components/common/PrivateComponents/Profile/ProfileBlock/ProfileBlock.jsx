@@ -6,21 +6,11 @@ import { useSelector } from 'react-redux'
 import ContentBlock from './ContentBlock'
 import { useDispatch } from 'react-redux'
 import { getLocalStorage } from '../../../../../utiles'
-import { editAva, getProfile } from '../../../../../redux/actions/actions'
 
 export default function ProfileBlock() {
     const dispatch = useDispatch()
     const userData = useSelector(state => state.session.userData)
 
-    const [file, setFile] = useState(null)
-    
-    const handleEditAva = () => {
-        const session = getLocalStorage("session")
-        const formData = new FormData()
-        formData.append("file", file)
-
-        dispatch(editAva(formData, session.token))
-    }
 
 
     return (
@@ -30,14 +20,7 @@ export default function ProfileBlock() {
                     <Ava 
                         src={userData.userImageModel ? userData.userImageModel.userImageUrl : defaultUserAva}
                     />
-                    <button><label htmlFor='ava'>
-                        select image
-                    </label></button>
                 </AvaWrapperBlock>
-                <input type="file" id="ava" style={{display: "none"}} onChange={e => setFile(e.target.files[0])}/>
-                <ChangeAvaBtn onClick={handleEditAva}>
-                        Изменить аватар
-                </ChangeAvaBtn>
             </AvaBlock>
             <ContentBlock />
         </SProfileBlock>

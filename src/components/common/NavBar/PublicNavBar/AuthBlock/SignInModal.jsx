@@ -8,7 +8,7 @@ import { DARK_BLACK } from '../../../../../media/colors'
 import { auth, firebase } from '../../../../../firebase'
 import { useDispatch, useSelector } from 'react-redux'
 import { authUser, clearAuthErrors, setAuthError } from '../../../../../redux/actions/actions'
-import { getLocalStorage } from '../../../../../utiles'
+import { getLocalStorage, getUsername } from '../../../../../utiles'
 import useFetching from '../../../../../hooks/useFetching'
 import ErrorQuery from '../../../../../UI/ErrorQuery'
 import Loader from '../../../../../UI/Loader'
@@ -41,7 +41,7 @@ export default function SignInModal(props) {
 
         const body = {
             password: user.uid,
-            username: user.displayName.split(' ').join('')
+            username: getUsername(user.email)
         }
         
         dispatch(authUser(body))

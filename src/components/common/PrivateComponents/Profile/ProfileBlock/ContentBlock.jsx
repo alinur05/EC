@@ -2,7 +2,7 @@ import { EditOutlined } from '@ant-design/icons/lib/icons'
 import React, { useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { editProfile } from '../../../../../redux/actions/actions'
+import { DARK_BLACK } from '../../../../../media/colors'
 import Flex from '../../../../../UI/Flex'
 
 export default function ContentBlock() {
@@ -16,11 +16,6 @@ export default function ContentBlock() {
     })
 
     const handleFieldChainging = e => setFields({...fields, [e.target.name]:e.target.value})
-
-
-    const handleSave = () => {
-        dispatch(editProfile(fields))
-    }
 
     return (
         <SContentBlock>
@@ -52,19 +47,27 @@ export default function ContentBlock() {
                 </Clause>
                 <Clause>
                     <span>Баланс: {userData.userBalanceModel && userData.userBalanceModel.userBalance}</span>
+                    <CashBtn>Пополнить +</CashBtn>
                 </Clause>
             </List>
-            <input 
-                type="file"
-                id="ava"
-                style={{display:"none"}}
-                onChange={e => setFields({...fields, file: e.target.files[0]})}
-            />
-            <SaveBtn onClick={handleSave}><label htmlFor='ava'>Сохранить</label></SaveBtn>
         </SContentBlock>
     )
 }
 
+const CashBtn = styled.button`
+    font-size: 12px;
+    border: 1px solid #e3e3e3;
+    padding: 1px 13px;
+    color: #252525;
+    background: none;
+    font-size: 14px;
+    border-radius:5px;
+    cursor:pointer;
+    &:hover {
+        border: 1px solid ${DARK_BLACK};
+        color: #000;
+    }
+`
 const SaveBtn = styled.button`
     font-size: 16px;
     border: 1px solid #EFECEA;

@@ -18,7 +18,7 @@ export const getProfile = () => async dispatch => {
                 ...responce.value,
                 token: session.token
             }
-            removeLocalStorage("lesson")
+            removeLocalStorage("session")
             setLocalStorage("session", result)
             dispatch({type: GET_PROFILE, payload: result})
         }else {
@@ -137,15 +137,6 @@ export const removeCourse = courseId => async dispatch => {
 
 // PROFILE
 
-export const editProfile = (body) => async dispatch => {
-    const responce = await PostService.editProfile(body)
-    dispatch({type: EDIT_PROFILE, paylaod: responce.value})
-}
-export const editAva = (file, token) => async dispatch => {
-    const responce = await PostService.editAva(file, token)
-    console.log(responce)
-    // dispatch({type: EDIT_AVA, payload: responce.value})
-}
 
 
 // CREATE COURSE
@@ -201,7 +192,6 @@ export const purchaseCourse = (courseId) => async dispatch => {
     }else {
         dispatch(setPurchaseError(responce.details))
     }
-
 }
 
 // MY COURSE
