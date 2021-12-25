@@ -7,15 +7,16 @@ import defaultUserAva from '../../../../media/defaultUserAva.png'
 import { Button, Input } from 'antd'
 import {commentCourse} from '../../../../redux/actions/actions'
 import { getLocalStorage } from '../../../../utiles'
+import { DARK_BLACK } from '../../../../media/colors'
 
 
 export default function CommentBlock() {
     const course = useSelector(state => state.courses.course)
     const [comment, setComment] = useState("")
     const dispatch = useDispatch()
+    const session = getLocalStorage("session")
 
     const handleComment = () => {
-        const session = getLocalStorage("session")
         dispatch(commentCourse({comment, courseId: course.courseModel.id}, session.token))
         setComment("")
     }   
@@ -23,14 +24,22 @@ export default function CommentBlock() {
     return (
         <SCommentBlock>
             <CommentTitle>Комментарии</CommentTitle>
-            <CommentingBlock>
-                <Input
-                    value={comment}
-                    onChange={e => setComment(e.target.value)} 
-                    placeholder="comment.."
-                />
-                <Button onClick={handleComment}>Comment</Button>
-            </CommentingBlock>
+            {
+                session ?
+                    <CommentingBlock>
+                        <CommentField
+                            value={comment}
+                            onChange={e => setComment(e.target.value)} 
+                            placeholder="Комментарии.."
+                        />
+                        <Button onClick={handleComment}>Отправить</Button>
+                    </CommentingBlock>
+                :
+                    <WarnBlock>
+                        <WarnText>Только авторизованные пользователи могут оставить комментарии</WarnText>
+                    </WarnBlock>
+            }
+
             <CommentList>
                 {
                         course.comments &&
@@ -58,6 +67,31 @@ export default function CommentBlock() {
     )
 }
 
+const WarnText = styled.h3`
+    margin: 0;
+    font-size: 16px;
+    color: ${DARK_BLACK};
+
+`
+const WarnBlock = styled(Flex)`
+    width: 100%;
+    height: 50px;
+    border: 1px solid ${DARK_BLACK};
+    align-items:center;
+    justify-content:center;
+`
+const CommentField = styled.textarea`
+    outline: none;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    cursor:pointer;
+    padding: 10px;
+    width: 300px;
+    height: 80px;
+    &:hover {
+        border: 1px solid ${DARK_BLACK};
+    }
+`
 const UserName = styled.h3`
     font-size: 16px;
     color: gray;
