@@ -139,6 +139,14 @@ export const removeCourse = courseId => async dispatch => {
     dispatch({type: REMOVE_COURSE, payload: responce.value.id})
 }
 
+export const likeCourse = id => async dispatch => {
+    
+}
+
+export const unlikeCourse = id => async dispatch => {
+
+}
+
 // PROFILE
 
 

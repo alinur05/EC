@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom/cjs/react-router-dom.min'
 import styled from 'styled-components'
 import useFetching from '../../hooks/useFetching'
 import { DARK_BLACK, RED, WHITE, YELLOW } from '../../media/colors'
-import { clearCourseDetails, getCourseDetails } from '../../redux/actions/actions'
+import { clearCourseDetails, getCourseDetails, likeCourse, unlikeCourse } from '../../redux/actions/actions'
 import Flex from '../../UI/Flex'
 import UnFound from '../../UI/UnFound'
 import defaultCourseImage from '../../media/defultCourseImage.png'
@@ -13,7 +13,7 @@ import { CaretRightOutlined, CommentOutlined, LikeOutlined, LockOutlined } from 
 import { Collapse } from 'antd';
 import CommentBlock from '../common/PublicComponents/CourseDetails/CommentBlock'
 import RightBar from '../common/PublicComponents/CourseDetails/RightBar'
-import {getImageOnCategory, isGoodUrl} from '../../utiles/index'
+import {getImageOnCategory, getLocalStorage, isGoodUrl} from '../../utiles/index'
 import Loader from '../../UI/Loader'
 
 const { Panel } = Collapse;
@@ -34,6 +34,17 @@ export default function CourseDetails() {
         }
     }, [])
 
+
+    const handleLike = async () => {
+        let userId = getLocalStorage("session").userModelToSend.id
+        let isAlreadyLiked = course.likes.find(like => like.userId == userId)
+
+        if(!isAlreadyLiked) {
+            dispatch(likeCourse(id))
+        }else {
+            dispatch(unlikeCourse(id))
+        }
+    }
 
     return (
         loading ?
@@ -58,7 +69,7 @@ export default function CourseDetails() {
                             <Flex gap="10px">
                                 <Flex gap="5px" align="center">
                                     <Like>{course.likes && course.likes.length}</Like>
-                                    <LikeOutlined style={{fontSize: "16px", color:'#fff',}} />
+                                    <LikeOutlined style={{fontSize: "16px", color:'#fff',}} onClick={handleLike}/>
                                 </Flex>
                                 <Flex gap="5px" align="center">
                                     <Comment>{course.likes && course.likes.length}</Comment>
