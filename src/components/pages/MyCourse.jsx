@@ -38,7 +38,7 @@ export default function MyCourse() {
             <ArrowLeftOutlined style={{fontSize: "20px", color: "gray"}} />
             <GoBackBtn>назад</GoBackBtn>
         </Flex>    
-        <Title size="64px">{data.courseModel && data.courseModel.courseName}</Title>
+        <Title size="36px">{data.courseModel && data.courseModel.courseName}</Title>
         <BlocksWrapper>
             <InfoBlock data={data}/>
             <LessonsBlock data={data.lessons} id={id} />

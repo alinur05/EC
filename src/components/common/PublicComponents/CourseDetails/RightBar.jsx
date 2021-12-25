@@ -4,29 +4,32 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { DARK_BLACK, WHITE, YELLOW } from '../../../../media/colors'
-import { purchaseCourse } from '../../../../redux/actions/actions'
+import { purchaseCourse, setPurchaseError } from '../../../../redux/actions/actions'
 import Flex from '../../../../UI/Flex'
 import { Button, notification } from 'antd';
+import Loader from '../../../../UI/Loader'
 
 export default function RightBar({cost, lessons, courseId}) {
     const dispatch = useDispatch()
     const [visible, setVisible] = useState(false)
     const error = useSelector(state => state.purchase.error)
+    const loading = useSelector(state => state.purchase.loading)
 
-    const openNotification = msg => {
+    const openNotification = () => {
         notification.open({
-          message: msg
+          message: error
         })
       }
       
     const handleBuyCourse = () => {
-        dispatch(purchaseCourse(courseId))   
-        
         if(!error) {
             setVisible(false)
+            dispatch(setPurchaseError(""))
         }else {
-            openNotification(error)
+            openNotification()
         }
+        
+        dispatch(purchaseCourse(courseId))   
     }
 
 
@@ -46,8 +49,16 @@ export default function RightBar({cost, lessons, courseId}) {
                     bodyStyle={{paddingTop: "50px"}}
                 >
                     <ModalContent>
-                        <Prompt>К оплате: {cost} сом</Prompt>
-                        <Purchase onClick={handleBuyCourse}>Купить</Purchase>
+                        {
+                            loading ?
+                                <Loader />
+                            :
+
+                            <>
+                                <Prompt>К оплате: {cost} сом</Prompt>
+                                <Purchase onClick={handleBuyCourse}>Купить</Purchase>
+                            </>
+                        }
                     </ModalContent>
                 </Modal>
                 <span style={{fontSize: "16px"}}>Этот курс включает:</span>

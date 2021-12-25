@@ -1,12 +1,34 @@
-// import others from '../media/categoryImages/others'
+import it from '../media/categoryImages/it.jpg'
+import business from '../media/categoryImages/business.jpg'
+import marketing from '../media/categoryImages/Marketing.jpg'
+import sport from '../media/categoryImages/sport.jpg'
+import art from '../media/categoryImages/art.jpg'
+import design from '../media/categoryImages/desine.jpg'
+import music from '../media/categoryImages/music.jpg'
+import others from '../media/defultCourseImage.png'
 
-// export const getImageOnCategory = category => {
-//     switch(category) {
-
-//         default:
-//             return others
-//     }
-// }
+export const getImageOnCategory = categoryId => {
+    switch(categoryId) {
+        case 1:
+            return it
+        case 2:
+            return business
+        case 3:
+            return marketing
+        case 4:
+            return sport
+        case 5: 
+            return art
+        case 6:
+            return design
+        case 7:
+            return music
+        case 8:
+            return others
+        default:
+            return others
+    }
+}
 
 export const signupFieldsValidator = (fields) => {
     let result = {

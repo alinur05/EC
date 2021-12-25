@@ -13,7 +13,8 @@ import { CaretRightOutlined, CommentOutlined, LikeOutlined, LockOutlined } from 
 import { Collapse } from 'antd';
 import CommentBlock from '../common/PublicComponents/CourseDetails/CommentBlock'
 import RightBar from '../common/PublicComponents/CourseDetails/RightBar'
-import {isGoodUrl} from '../../utiles/index'
+import {getImageOnCategory, isGoodUrl} from '../../utiles/index'
+import Loader from '../../UI/Loader'
 
 const { Panel } = Collapse;
 
@@ -35,6 +36,10 @@ export default function CourseDetails() {
 
 
     return (
+        loading ?
+            <Loader />
+        :
+
         <div>
             <IntroSection>
                 <LeftSide>
@@ -65,7 +70,7 @@ export default function CourseDetails() {
                 </LeftSide>
                 <RightSide>
                     <Image
-                        src={course.imageModel && course.imageModel.courseImageUrl ? course.imageModel.courseImageUrl: defaultCourseImage}
+                        src={course.imageModel && course.imageModel.courseImageUrl ? course.imageModel.courseImageUrl: getImageOnCategory(course.courseModel && course.courseModel.categoryId)}
                     />
                 </RightSide>
             </IntroSection>

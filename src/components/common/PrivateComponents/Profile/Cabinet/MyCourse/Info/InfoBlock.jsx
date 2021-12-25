@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import Flex from '../../../../../../../UI/Flex'
 import defualtCourseImage from '../../../../../../../media/defultCourseImage.png'
-import {DARK_BLACK} from '../../../../../../../media/colors'
-import { CommentOutlined, LikeOutlined, PlayCircleOutlined } from '@ant-design/icons'
-import { Select } from 'antd';
+import {DARK_BLACK, RED, YELLOW} from '../../../../../../../media/colors'
+import { CommentOutlined, LikeOutlined, PlayCircleOutlined, WarningFilled, WarningOutlined, DownloadOutlined } from '@ant-design/icons'
+import { Modal, Select } from 'antd';
 import Loader from '../../../../../../../UI/Loader'
-import { setAuthError, setMyCourseError, updateCourse } from '../../../../../../../redux/actions/actions'
+import { removeCourse, setAuthError, setMyCourseError, updateCourse } from '../../../../../../../redux/actions/actions'
 import { checkEmail, checkNumber } from '../../../../../../../utiles'
 import Error from '../../../../../../../UI/Error'
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 
 const { Option } = Select;
 
@@ -18,6 +19,7 @@ export default function InfoBlock({data}) {
     const categories = useSelector(state => state.category.categories)
     const isLoading = useSelector(state => state.myCourse.loading)
     const error = useSelector(state => state.myCourse.error)
+    const history = useHistory()
 
     const [fields, setFields] = useState({
         categoryId: data.courseModel && data.courseModel.categoryId,
@@ -41,19 +43,33 @@ export default function InfoBlock({data}) {
         if(!email) dispatch(setMyCourseError("Неправильный формат email"))
         if(!num) dispatch(setMyCourseError("Неправильный формат номера"))
 
+        const formData = new FormData()
+        formData.append("file", file)
         if(email && num) {
             const body = {
                 fields: {...fields, id: data.courseModel.id},
                 file: {
                     type: data.imageModel ? "update":"create",
                     id: data.imageModel ? data.imageModel.id: data.courseModel.id,
-                    data: file
+                    data: formData
                 },
     
             }
             dispatch(updateCourse(body))
             dispatch(setMyCourseError(''))
         }
+    }
+
+    const [removeModalVisible, setRemoveModalVisible] = useState(false)
+
+    const handleCloseModal = () => {
+        setRemoveModalVisible(false)
+    }
+
+    const handleRemoveCourse = () => {
+        dispatch(removeCourse(data.courseModel.id))
+        handleCloseModal()
+        history.push("/profile")
     }
 
     return (
@@ -65,9 +81,14 @@ export default function InfoBlock({data}) {
                 <FirstSection>
                     <ImageBlock>
                         <Img 
-                            src={data.imageModel ? data.imageModel.courseImageUrl : defualtCourseImage}
+                            src={data.imageModel ? data.imageModel.courseImageUrl : file }
                             alt="courseImg"
                         />
+                        <UpdateImgBlock>
+                            <input type="file" id='courseImage' style={{display: 'none'}} onChange={e => setFile(e.target.files[0])}/>
+                            <DownloadOutlined style={{fontSize: "48px"}}/>
+                            <LoadBtn htmlFor="courseImage">Загрузить</LoadBtn>
+                        </UpdateImgBlock>
                         <Flex gap="10px">
                             <Flex gap="5px" align="center">
                                 <Likes>{data.likes && data.likes.length}</Likes>
@@ -145,19 +166,51 @@ export default function InfoBlock({data}) {
                         )
                     }
                     </Select>
+                </Footer>
+                <Flex width="100%" justify="flex-end" align='center' gap="15px">
+                    <RemoveBtn onClick={() => setRemoveModalVisible(true)}>Удалить</RemoveBtn>
+                    <Modal
+                        footer={false}
+                        header={false}
+                        visible={removeModalVisible}
+                        onCancel={handleCloseModal}
+                    >
+                        <Flex direction="column" align="center" gap="15px">
+                            <WarningOutlined style={{fontSize: "32px", color: YELLOW}}/>
+                            <span>Вы уверены?</span>
+                            <Flex gap="8px">
+                                <CancelBtn onClick={handleCloseModal}>Отмена</CancelBtn>
+                                <RemoveBtn onClick={handleRemoveCourse}>Удалить</RemoveBtn>
+                            </Flex>
+                        </Flex>
+                    </Modal>
                     {
                         isLoading ?
                             <Loader width="auto" height="auto" size="24px" />
                         :
                             <SaveBtn onClick={handleSaveBtn}>Сохранить</SaveBtn>
                     }
-                </Footer>
+                </Flex>
                 <Error text={error} height="auto" size="16px" />
             </InfoBody>
         </SInfoBlock>
     )
 }
 
+const LoadBtn = styled.label`
+    font-size: 32px;
+    &:hover {
+        color:gray;
+    }
+`
+const UpdateImgBlock = styled(Flex)`
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    flex-direction:column;
+    cursor:pointer;
+    align-items:center;
+`
 const SaveBtn = styled.button`
     border-radius: 5px;
     border: 1px solid #e3e3e3;
@@ -168,6 +221,22 @@ const SaveBtn = styled.button`
     &:hover {
         border: 1px solid ${DARK_BLACK};
         color: #000
+    }
+`
+const CancelBtn = styled(SaveBtn)`
+
+`
+const RemoveBtn = styled.button`
+    border-radius: 5px;
+    border: 1px solid ${RED};
+    padding: 5px 13px;
+    background: none;
+    color: #FFF;
+    cursor:pointer;
+    background: ${RED};
+    &:hover {
+        border: 1px solid #a60013;
+        background: #a60013
     }
 `
 const Field = styled.input`
@@ -231,7 +300,7 @@ const ContentBlock = styled(Flex)`
 `
 const Img = styled.img`
     width: 100%;
-    height: 100%;
+    height: 220px;
     object-fit:cover;
     border-radiusS: 100%;
 `
@@ -239,7 +308,7 @@ const ImageBlock = styled(Flex)`
     width: 50%;
     flex-direction:column;
     gap: 10px;
-
+    position:relative;
 `
 const FirstSection = styled(Flex)`
     width: 100%;

@@ -9,6 +9,7 @@ import { DeleteColumnOutlined, DeleteOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import { useDispatch } from 'react-redux'
 import { removeCourse } from '../../../../../../redux/actions/actions'
+import { getImageOnCategory } from '../../../../../../utiles'
 
 export default function MyCourses() {
     const data = useSelector(state => state.session.userData.userCreateCourseModels) || []
@@ -19,7 +20,7 @@ export default function MyCourses() {
         <SMyCourses>
             <Header>
                 <Title>Мои курсы</Title>
-                <NewCourseBtn onClick={() => history.push("/profile/create")}>+</NewCourseBtn>
+                <NewCourseBtn onClick={() => history.push("/profile/create")}>Новый курс +</NewCourseBtn>
             </Header>
             <List>
                 {   
@@ -28,7 +29,7 @@ export default function MyCourses() {
                         <Clause onClick={() => history.push(`/profile/mycourses/${item.courseModel.id}`)}>    
                             <ClauseImage>
                                 <Image 
-                                    src={item.imageModel ? item.imageModel.courseImageUrl : defaultCourseImage}
+                                    src={item.imageModel ? item.imageModel.courseImageUrl : getImageOnCategory(item.courseModel.categoryId)}
                                 /> 
                             </ClauseImage>
                             <ClauseBody>

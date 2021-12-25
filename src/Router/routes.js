@@ -7,6 +7,7 @@ import SearchQuery from "../components/pages/SearchQuery"
 import SearchCategory from "../components/pages/SearchCategory"
 import Create from "../components/pages/Create"
 import MyCourse from "../components/pages/MyCourse"
+import BoughtCourse from "../components/pages/BoughtCourse"
 
 
 export const publicRoutes = [
@@ -28,5 +29,6 @@ export const privateRoutes = [
     {path: "/profile", component: Profile, exact: true},
     {path: "/profile/create", component: Create, exact: true},
     {path: "/profile/mycourses/:id", component: MyCourse, exact:true},
+    {path: "/profile/bought-courses/:id", component: BoughtCourse, exact:true}
 ]
 

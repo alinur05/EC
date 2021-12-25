@@ -5,6 +5,7 @@ import Flex from '../../../../../UI/Flex'
 import defaultCourseImage from '../../../../../media/defultCourseImage.png'
 import { CommentOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
+import { getImageOnCategory } from '../../../../../utiles'
 
 export default function Cards() {
     const coursesSplittedByCategories = useSelector(state => state.courses.coursesSplittedByCategories)
@@ -27,7 +28,7 @@ export default function Cards() {
                                                 course.imageModel ?
                                                     course.imageModel.courseImageUrl
                                                 :
-                                                    defaultCourseImage
+                                                    getImageOnCategory(course.courseModel.categoryId)
                                         }
                                         />
                                     </CardTop>

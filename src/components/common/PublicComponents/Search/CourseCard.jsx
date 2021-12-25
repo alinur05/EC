@@ -3,6 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Flex from '../../../../UI/Flex'
 import defaultCourseImage from '../../../../media/defaultUserAva.png'
+import { getImageOnCategory } from '../../../../utiles'
 
 export default function CourseCard({data, onClick}) {
 
@@ -14,14 +15,14 @@ export default function CourseCard({data, onClick}) {
                                                             data.imageModel ?
                                                                 data.imageModel.courseImageUrl
                                                             :
-                                                                defaultCourseImage
+                                                                getImageOnCategory(data.courseModel.categoryId)
                                                             }
                                                     />
                                                 </CardTop>
                                                 <CardBody>
                                                     <Flex width="100%" direction="column">
                                                         <CourseName>{data.courseModel && data.courseModel.courseName}</CourseName>
-                                                        <CourseAuthor>Автор: {data.courseModel && data.courseModel.userId}</CourseAuthor>
+                                                        <CourseAuthor>Автор: {data.authorFullName}</CourseAuthor>
                                                     </Flex>
                                                     <Flex justify="space-between" width="100%" align="center">
                                                         <Flex gap="15px">

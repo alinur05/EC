@@ -4,10 +4,12 @@ import styled from 'styled-components'
 import Flex from '../../../../../../UI/Flex'
 import UnFound from '../../../../../../UI/UnFound'
 import defaultCourseImage from '../../../../../../media/defultCourseImage.png'
+import {useHistory} from 'react-router-dom'
+import { getImageOnCategory } from '../../../../../../utiles'
 
 export default function PurchasedCourses() {
     const data = useSelector(state => state.session.userData.userPurchasedCourseModels) || []
-
+    const history = useHistory()
 
     return (
         <SPurchasedCourses>
@@ -18,10 +20,10 @@ export default function PurchasedCourses() {
                 {   
                     data.length ?
                     data.map(item => 
-                        <Clause>    
+                        <Clause onClick={() => history.push(`/profile/bought-courses/${item.courseModel.id}`)}>    
                             <ClauseImage>
                                 <Image 
-                                    src={item.imageModel ? item.imageModel.courseImageUrl : defaultCourseImage}
+                                    src={item.imageModel ? item.imageModel.courseImageUrl : getImageOnCategory(item.courseModel.categoryId)}
                                 /> 
                             </ClauseImage>
                             <ClauseBody>
@@ -75,7 +77,7 @@ const List = styled.ul`
     display:flex;
     flex-direction:column;
     gap: 15px;
-    padding: 15px 10px;
+    padding: 20px 10px;
 `
 const Title = styled.h3`
     font-size: 20px;

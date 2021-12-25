@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import Flex from '../../../../UI/Flex'
 import {Carousel} from 'antd'
 import { DARK_BLACK } from '../../../../media/colors'
-import fon1 from '../../../../media/fon1.png'
-import fon2 from '../../../../media/gears-5193383.png'
+import fon1 from '../../../../media/f1.jpg'
+import fon2 from '../../../../media/f2.jpg'
 import Slider from 'react-slick'
 
 export default function Banner() {

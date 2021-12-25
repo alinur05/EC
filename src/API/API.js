@@ -15,6 +15,22 @@ class PostService {
 
     // AUTHENTICATION
 
+    static async updateAva(file) {
+        const session = getLocalStorage("session")
+        if(file.type === "create") {
+            fetcher("post", "/user-image/create", file.data, {
+                headers: {
+                    Authorization: session.token
+                }
+            })
+        }else if(file.type === "update") {
+            fetcher("put", "/user-image/update", file.data, {
+                headers: {
+                    Authorization: session.token
+                }
+            })
+        }
+    }
     static async sign_up(body) {
         try {
             const responce = await fetcher("post", "/user/sign-up", body)
@@ -31,7 +47,9 @@ class PostService {
     // COURSES
     static async getAllCourses() {
         const allCourses = await fetcher("get", "/course/get-all")
-        const categories = await fetcher("get", "/category/get-all")
+        const response = await fetcher("get", "/category/get-all")
+        const categories = [...response.value, {"id": 8,"categoryName": "Другое"}]
+        
         return {allCourses, categories}
     }
     static async getCoursesByCategoryId(categories) {
@@ -74,22 +92,24 @@ class PostService {
     // COURSE
 
     static async updateCourse(body) {
+        console.log(body)
+
         const session = getLocalStorage("session")
-        if(body.file.data) {
+
             if(body.file.type === "update") {
-                fetcher("put", `/course-image/create/${body.file.id}`, body.file.data, {
-                    headers: {
-                        Authorization: session.token
-                    }
-                })
-            }else if(body.file.type === "create"){
                 fetcher("put", `/course-image/update/${body.file.id}`, body.file.data, {
                     headers: {
                         Authorization: session.token
                     }
                 })
+            }else if(body.file.type === "create"){
+                fetcher("post", `/course-image/create/${body.file.id}`, body.file.data, {
+                    headers: {
+                        Authorization: session.token
+                    }
+                })
             }
-        }
+
 
         let courseModel = await fetcher("put", "/course/update", body.fields, {
             headers: {

@@ -1,8 +1,13 @@
 import PostService from '../../API/API'
 import { getCategoriesCapitaled, getLocalStorage, removeLocalStorage, setLocalStorage } from '../../utiles'
-import { CLEAN_UP_PROFILE, UPDATE_COURSE, SET_MY_COURSE_LESSON, REMOVE_LESSON, REMOVE_COURSE, CREATE_LESSONS, ADD_LESSON, GET_PROFILE, PURCHASE_COURSE, STEP_RESET, SET_CREATE_ERROR, SET_COURSE_IMAGE, CREATE_NEW_COURSE, GET_COURSES_BY_QUERY, CLEAN_UP_SEARCHED_COURSES, CLEAN_UP_CATEGORY_COURSES, GET_COURSE_BY_CATEGORY, COMMENT_COURSE, EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS, NEXT_STEP, TOGGLE_CREATE_LOADING, TOGGLE_SEARCH_LOADING, SET_SEARCH_ERROR, TOGGLE_SESSION_LOADING, CLEAN_UP_MY_COURSE, SET_MY_COURSE_DATA, SET_MY_COURSE_ERROR, TOGGLE_MY_COURSE_LOADING, SAVE_LESSON, SAVE_COURSE, TOGGLE_PURCHASE_LOADING, SET_PURCHASE_ERROR, SET_SESSION_ERR} from '../types'
+import { CLEAN_UP_BOUGHT_COURSE, CLEAN_UP_PROFILE, SET_BOUGHT_ERROR, UPDATE_COURSE, SET_MY_COURSE_LESSON, REMOVE_LESSON, REMOVE_COURSE, CREATE_LESSONS, ADD_LESSON, GET_PROFILE, PURCHASE_COURSE, STEP_RESET, SET_CREATE_ERROR, SET_COURSE_IMAGE, CREATE_NEW_COURSE, GET_COURSES_BY_QUERY, CLEAN_UP_SEARCHED_COURSES, CLEAN_UP_CATEGORY_COURSES, GET_COURSE_BY_CATEGORY, COMMENT_COURSE, EDIT_PROFILE, SPLIT_BY_CATEGIRES, GET_ALL_COURSES, AUTH_USER, LOGOUT_USER, SET_AUTH_ERROR, CLEAR_AUTH_ERRORS, CLEAN_UP_COURSES, CLEAN_UP_ALL_COURSES, GET_CATEGORIES, GET_COURSE_DETAILS, CLEAN_UP_DETAILS, NEXT_STEP, TOGGLE_CREATE_LOADING, TOGGLE_SEARCH_LOADING, SET_SEARCH_ERROR, TOGGLE_SESSION_LOADING, CLEAN_UP_MY_COURSE, SET_MY_COURSE_DATA, SET_MY_COURSE_ERROR, TOGGLE_MY_COURSE_LOADING, SAVE_LESSON, SAVE_COURSE, TOGGLE_PURCHASE_LOADING, SET_PURCHASE_ERROR, SET_SESSION_ERR, TOGGLE_BOUGHT_LOADING, SET_BOUGHT_COURSE, SET_LESSON} from '../types'
 
 // SESSION
+
+export const updateUserAva = file => async dispatch => {
+    PostService.updateAva(file)
+    dispatch(getProfile())   
+}
 
 export const setAuthError = (authKey, value) => ({type: SET_AUTH_ERROR, payload: {authKey, value}})
 
@@ -69,8 +74,7 @@ export const getCoures = (token) => async dispatch => {
     dispatch(toggleSearchLoading())
         const responce = await PostService.getAllCourses()
         const {allCourses, categories} = responce
-        
-        const capitalledCategories = getCategoriesCapitaled(categories.value)
+        const capitalledCategories = getCategoriesCapitaled(categories)
 
         const splittedByCategories = await PostService.getCoursesByCategoryId(capitalledCategories, token)
 
@@ -183,6 +187,7 @@ export const togglePurchaseLoading = () => ({type: TOGGLE_PURCHASE_LOADING})
 export const setPurchaseError = error => ({type: SET_PURCHASE_ERROR, payload: error})
 
 export const purchaseCourse = (courseId) => async dispatch => {
+    dispatch(togglePurchaseLoading())
     const responce = await PostService.purchaseCourse(courseId)
 
     if(responce.status !== "FAIL") {
@@ -192,9 +197,10 @@ export const purchaseCourse = (courseId) => async dispatch => {
     }else {
         dispatch(setPurchaseError(responce.details))
     }
+    dispatch(togglePurchaseLoading())
 }
 
-// MY COURSE
+// MY COURSE 
 
 export const cleanUpMyCourse = () => ({type: CLEAN_UP_MY_COURSE})
 export const setMyCourseError = payload => ({type: SET_MY_COURSE_ERROR, payload})
@@ -236,3 +242,22 @@ export const updateCourse = body => async dispatch => {
         dispatch({type: UPDATE_COURSE, payload: responce})
     dispatch(toggleMyCourseLoading())
 }
+
+export const removeMyCourse = id => async dispatch => {
+    const responce = await PostService.removeCourse(id)
+    console.log(responce)
+}
+
+// BOUGHT COURSE
+
+export const toggleBoughtCourse = () => ({type: TOGGLE_BOUGHT_LOADING})
+export const setBoughtCourseErr = text => ({type: SET_BOUGHT_ERROR, payload: text})
+
+export const setBoughtData = id => async dispatch => {
+    dispatch(toggleBoughtCourse())
+        const responce = await PostService.getCourseDetails(id)
+        dispatch({type:SET_BOUGHT_COURSE, payload: responce})
+    dispatch(toggleBoughtCourse())
+}
+export const clearBoughtCourseData = () => ({type: CLEAN_UP_BOUGHT_COURSE})
+export const setLesson = lesson => ({type: SET_LESSON, payload: lesson})
