@@ -72,7 +72,7 @@ export default function CourseDetails() {
                                     <LikeOutlined style={{fontSize: "16px", color:'#fff',}} onClick={handleLike}/>
                                 </Flex>
                                 <Flex gap="5px" align="center">
-                                    <Comment>{course.likes && course.likes.length}</Comment>
+                                    <Comment>{course.comments && course.comments.length}</Comment>
                                     <CommentOutlined style={{fontSize: "16px", color: '#fff'}} />
                                 </Flex>
                             </Flex>

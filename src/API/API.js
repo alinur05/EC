@@ -14,7 +14,27 @@ async function fetcher(method, path, payload, configs) {
 class PostService {
 
     // AUTHENTICATION
+    static async unLikeCourse(courseId) {
+        const session = getLocalStorage("session")
+        const responce = await (await fetch(`${ENDPOINT}/like/delete/${courseId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: session.token
+            }
+        })).json()
+        return responce
+    }
 
+    static async likeCourse(courseId) {
+        const session = getLocalStorage("session")
+        const responce = await (await fetch(`${ENDPOINT}/like/create/${courseId}`, {
+            method: "POST",
+            headers: {
+                Authorization: session.token
+            }
+        })).json()
+        return responce
+    }
     static async updateAva(file) {
         const session = getLocalStorage("session")
         if(file.type === "create") {

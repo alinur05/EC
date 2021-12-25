@@ -1,4 +1,4 @@
-import { SET_SEARCH_ERROR, TOGGLE_SEARCH_LOADING, GET_COURSES_BY_QUERY, CLEAN_UP_CATEGORY_COURSES, CLEAN_UP_SEARCHED_COURSES, GET_COURSE_BY_CATEGORY, CLEAN_UP_ALL_COURSES, CLEAN_UP_DETAILS, COMMENT_COURSE, GET_ALL_COURSES, GET_COURSE_DETAILS, SPLIT_BY_CATEGIRES } from "../types"
+import { SET_SEARCH_ERROR, TOGGLE_SEARCH_LOADING, GET_COURSES_BY_QUERY, CLEAN_UP_CATEGORY_COURSES, CLEAN_UP_SEARCHED_COURSES, GET_COURSE_BY_CATEGORY, CLEAN_UP_ALL_COURSES, CLEAN_UP_DETAILS, COMMENT_COURSE, GET_ALL_COURSES, GET_COURSE_DETAILS, SPLIT_BY_CATEGIRES, LIKE_COURSE, UNLIKE_COURSE } from "../types"
 
 const initialState = {
     allCourses: [],
@@ -36,6 +36,12 @@ const coursesReducer = (state = initialState, action) => {
             return {...state, loading: !state.loading}
         case SET_SEARCH_ERROR:
             return {...state, error: action.payload}
+        case LIKE_COURSE:
+            console.log(action.payload)
+            return {...state, course: {...state.course, likes: [...state.course.likes, action.payload]}}
+        case UNLIKE_COURSE:
+            console.log(action.payload)
+            return {...state, course: {...state.course, likes: [...state.course.likes].filter(item => item.id !== action.payload.id)}}
         default:    
             return state
     }
